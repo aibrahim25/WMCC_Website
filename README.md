@@ -32,7 +32,7 @@ The dev server runs at http://localhost:5173.
 
 | Command                 | What it does                                                               |
 | ----------------------- | -------------------------------------------------------------------------- |
-| `npm run dev`           | Start the dev server with hot reload                                       |
+| `npm run dev`           | Start the dev server with hot reload (`npm start` does the same)           |
 | `npm run build`         | Production build into `dist/`                                              |
 | `npm run preview`       | Serve the production build locally                                         |
 | `npm run build:preview` | Build the whole site as one self-contained HTML file in `dist-preview/`    |
