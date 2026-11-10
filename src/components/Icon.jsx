@@ -12,8 +12,12 @@ const PATHS = {
       <path d="M12 7.5V12l3 2" />
     </>
   ),
-  book: <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z" />,
-  hands: <path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11M10 10V5a1.5 1.5 0 0 1 3 0v5M13 10V6a1.5 1.5 0 0 1 3 0v6c0 4-2.5 8-6.5 8S4 17 4 14v-2a1.5 1.5 0 0 1 3 0" />,
+  book: (
+    <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z" />
+  ),
+  hands: (
+    <path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11M10 10V5a1.5 1.5 0 0 1 3 0v5M13 10V6a1.5 1.5 0 0 1 3 0v6c0 4-2.5 8-6.5 8S4 17 4 14v-2a1.5 1.5 0 0 1 3 0" />
+  ),
   calendar: (
     <>
       <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
@@ -60,6 +64,7 @@ const PATHS = {
   shield: <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />,
 }
 
+/** Inline line icon (24×24 grid, inherits text colour). Decorative only. */
 export default function Icon({ name, size = 22, stroke = 1.8, className, style }) {
   return (
     <svg

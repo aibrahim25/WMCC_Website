@@ -1,8 +1,9 @@
-import site from '../content/site.json'
+import { site } from './site'
 
 const { lat, lng, timezone } = site.location
-const P = site.prayer
+const settings = site.prayer
 
+/** IANA time zone of the masjid. All displayed times are in this zone, whatever the visitor's device says. */
 export const TZ = timezone
 
 export const PRAYERS = [
@@ -14,20 +15,31 @@ export const PRAYERS = [
   { key: 'isha', name: 'Isha', ar: 'العشاء' },
 ]
 
+/** The five daily prayers in order (sunrise excluded). */
 export const PRAYER_ORDER = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 
-// Astronomical prayer time calculation (same math as praytimes.org).
-// Returns epoch milliseconds for each time on the given calendar date in Windham.
+export const jumuah = settings.jumuah
+
+/**
+ * Astronomical prayer times for one calendar day in Windham, using the same formulas as praytimes.org.
+ * Angles and the Asr factor come from `site.json → prayer`.
+ *
+ * @param {number} y Year
+ * @param {number} m Month, 1–12
+ * @param {number} d Day of the month
+ * @returns {Record<'fajr'|'sunrise'|'dhuhr'|'asr'|'maghrib'|'isha', number>} Epoch milliseconds for each time
+ */
 export function calcDay(y, m, d) {
-  const R = Math.PI / 180
+  const RAD = Math.PI / 180
   const fix = (a, b) => {
     a = a - b * Math.floor(a / b)
     return a < 0 ? a + b : a
   }
-  const sn = (x) => Math.sin(x * R)
-  const cs = (x) => Math.cos(x * R)
-  const tn = (x) => Math.tan(x * R)
+  const sin = (deg) => Math.sin(deg * RAD)
+  const cos = (deg) => Math.cos(deg * RAD)
+  const tan = (deg) => Math.tan(deg * RAD)
 
+  // Julian date
   let Y = y
   let M = m
   if (M <= 2) {
@@ -39,43 +51,64 @@ export function calcDay(y, m, d) {
   const jd = Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + d + B - 1524.5
   const jDate = jd - lng / (15 * 24)
 
-  const sun = (j) => {
+  // Sun declination and equation of time
+  const sunPosition = (j) => {
     const D = j - 2451545.0
     const g = fix(357.529 + 0.98560028 * D, 360)
     const q = fix(280.459 + 0.98564736 * D, 360)
-    const L = fix(q + 1.915 * sn(g) + 0.02 * sn(2 * g), 360)
+    const L = fix(q + 1.915 * sin(g) + 0.02 * sin(2 * g), 360)
     const e = 23.439 - 0.00000036 * D
-    const RA = Math.atan2(cs(e) * sn(L), cs(L)) / R / 15
-    return { decl: Math.asin(sn(e) * sn(L)) / R, eqt: q / 15 - fix(RA, 24) }
+    const RA = Math.atan2(cos(e) * sin(L), cos(L)) / RAD / 15
+    return { decl: Math.asin(sin(e) * sin(L)) / RAD, eqt: q / 15 - fix(RA, 24) }
   }
-  const mid = (t) => fix(12 - sun(jDate + t).eqt, 24)
-  const angle = (a, t, ccw) => {
-    const s = sun(jDate + t)
-    const T = Math.acos((-sn(a) - sn(s.decl) * sn(lat)) / (cs(s.decl) * cs(lat))) / R / 15
-    return mid(t) + (ccw ? -T : T)
+  const midDay = (t) => fix(12 - sunPosition(jDate + t).eqt, 24)
+  // Time at which the sun reaches `angle` below the horizon (before noon when `ccw` is true).
+  const sunAngleTime = (angle, t, ccw) => {
+    const { decl } = sunPosition(jDate + t)
+    const T = Math.acos((-sin(angle) - sin(decl) * sin(lat)) / (cos(decl) * cos(lat))) / RAD / 15
+    return midDay(t) + (ccw ? -T : T)
   }
-  const asr = (t) => {
-    const s = sun(jDate + t)
-    return angle(-Math.atan(1 / (P.asrFactor + tn(Math.abs(lat - s.decl)))) / R, t)
+  const asrTime = (t) => {
+    const { decl } = sunPosition(jDate + t)
+    return sunAngleTime(-Math.atan(1 / (settings.asrFactor + tan(Math.abs(lat - decl)))) / RAD, t)
   }
 
+  // Local solar hours; the second argument is the approximate time of day used to refine the sun position.
   const hours = {
-    fajr: angle(P.fajrAngle, 5 / 24, true),
-    sunrise: angle(0.833, 6 / 24, true),
-    dhuhr: mid(12 / 24),
-    asr: asr(13 / 24),
-    maghrib: angle(0.833, 18 / 24),
-    isha: angle(P.ishaAngle, 18 / 24),
+    fajr: sunAngleTime(settings.fajrAngle, 5 / 24, true),
+    sunrise: sunAngleTime(0.833, 6 / 24, true),
+    dhuhr: midDay(12 / 24),
+    asr: asrTime(13 / 24),
+    maghrib: sunAngleTime(0.833, 18 / 24),
+    isha: sunAngleTime(settings.ishaAngle, 18 / 24),
   }
-  const base = Date.UTC(y, m - 1, d)
+
+  // Convert solar hours to UTC epoch ms, rounded to the minute.
+  const midnightUtc = Date.UTC(y, m - 1, d)
   const out = {}
-  for (const k in hours) out[k] = base + Math.round((hours[k] - lng / 15) * 60) * 60000
+  for (const key in hours) out[key] = midnightUtc + Math.round((hours[key] - lng / 15) * 60) * 60000
   return out
 }
 
+/** Iqama time for a prayer, from the offsets in `site.json`, or null if that prayer has no iqama. */
+export function iqamaFor(key, athanMs) {
+  const offset = settings.iqamaOffsets[key]
+  return offset == null ? null : athanMs + offset * 60000
+}
+
+// ---------------------------------------------------------------------------
+// Calendar dates in the masjid's time zone, as plain { y, m, d } objects (m is 1–12).
+// ---------------------------------------------------------------------------
+
+/** The calendar date in Windham at the given instant. */
 export function partsInTz(ms) {
-  const parts = new Intl.DateTimeFormat('en-US', { timeZone: TZ, year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(ms)
-  const get = (t) => Number(parts.find((p) => p.type === t).value)
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: TZ,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).formatToParts(ms)
+  const get = (type) => Number(parts.find((p) => p.type === type).value)
   return { y: get('year'), m: get('month'), d: get('day') }
 }
 
@@ -84,19 +117,34 @@ export function addDays({ y, m, d }, n) {
   return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() }
 }
 
-export const fmtTime = (ms) => new Date(ms).toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' })
+/** Shifts a { y, m } month by `n` months. */
+export function addMonths({ y, m }, n) {
+  const index = y * 12 + (m - 1) + n
+  return { y: Math.floor(index / 12), m: (index % 12) + 1 }
+}
 
+// ---------------------------------------------------------------------------
+// Formatting
+// ---------------------------------------------------------------------------
+
+/** "5:42 AM" in Windham time. */
+export const fmtTime = (ms) =>
+  new Date(ms).toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' })
+
+/** "Tuesday, November 10" in Windham time. */
+export const fmtLongDate = (ms) =>
+  new Date(ms).toLocaleDateString('en-US', { timeZone: TZ, weekday: 'long', month: 'long', day: 'numeric' })
+
+/** Hijri (Umm al-Qura) date, e.g. "19 Jumada I 1448 AH". Empty if the browser lacks the Islamic calendar. */
 export function hijriLabel(ms) {
   try {
-    return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { timeZone: TZ, day: 'numeric', month: 'long', year: 'numeric' }).format(ms)
+    return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+      timeZone: TZ,
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(ms)
   } catch {
     return ''
   }
 }
-
-export function iqamaFor(key, athanMs) {
-  const off = P.iqamaOffsets[key]
-  return off == null ? null : athanMs + off * 60000
-}
-
-export const jumuah = P.jumuah

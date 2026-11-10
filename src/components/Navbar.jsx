@@ -5,7 +5,7 @@ import Logo from './Logo'
 import Icon from './Icon'
 import s from './Navbar.module.css'
 
-export const NAV_LINKS = [
+const NAV_LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/prayer-times', label: 'Prayer Times' },
   { to: '/events', label: 'Events' },
@@ -50,11 +50,22 @@ export default function Navbar() {
 
         <nav className={s.links} aria-label="Main">
           {NAV_LINKS.map((l) => (
-            <NavLink key={l.to} to={l.to} end={l.end} className={({ isActive }) => `${s.link} ${isActive ? s.active : ''}`}>
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.end}
+              className={({ isActive }) => `${s.link} ${isActive ? s.active : ''}`}
+            >
               {({ isActive }) => (
                 <>
                   {l.label}
-                  {isActive && <motion.span layoutId="nav-underline" className={s.underline} transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className={s.underline}
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
                 </>
               )}
             </NavLink>
@@ -91,7 +102,12 @@ export default function Navbar() {
             transition={{ duration: 0.25 }}
           >
             {NAV_LINKS.map((l, i) => (
-              <motion.div key={l.to} initial={{ opacity: 0, x: -14 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i + 0.05 }}>
+              <motion.div
+                key={l.to}
+                initial={{ opacity: 0, x: -14 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.04 * i + 0.05 }}
+              >
                 <NavLink to={l.to} end={l.end} className={({ isActive }) => `${s.mLink} ${isActive ? s.mActive : ''}`}>
                   {l.label}
                 </NavLink>

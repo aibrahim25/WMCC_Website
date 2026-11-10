@@ -12,7 +12,7 @@ export default function NotFound() {
           Prayer times
         </Link>
       </PageHero>
-      <div style={{ height: 80 }} />
+      <div className="section-end" />
     </>
   )
 }

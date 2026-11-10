@@ -1,13 +1,11 @@
-import site from '../content/site.json'
+import { fullAddress, MAPS_URL, site } from '../lib/site'
 import Icon from './Icon'
 import s from './MapCard.module.css'
 
-const a = site.address
-export const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${a.street}, ${a.city}, ${a.state} ${a.zip}`)}`
-
+/** Illustrated map card linking to the masjid on Google Maps. */
 export default function MapCard({ tall = false }) {
   return (
-    <a href={MAPS_URL} target="_blank" rel="noreferrer" className={`${s.map} ${tall ? s.tall : ''}`}>
+    <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className={`${s.map} ${tall ? s.tall : ''}`}>
       <svg className={s.art} viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <path d="M-20 290 Q300 230 600 270 T1220 220" fill="none" stroke="#FFFFFF" strokeWidth="18" />
         <path d="M520 -20 Q560 150 600 270 T660 460" fill="none" stroke="#FFFFFF" strokeWidth="12" />
@@ -21,9 +19,7 @@ export default function MapCard({ tall = false }) {
       </svg>
       <div className={s.label}>
         <span className={s.name}>{site.name}</span>
-        <span className={s.addr}>
-          {a.street}, {a.city}, {a.state} {a.zip}
-        </span>
+        <span className={s.addr}>{fullAddress()}</span>
         <span className={s.cta}>
           Open in Google Maps <Icon name="arrow" size={16} />
         </span>

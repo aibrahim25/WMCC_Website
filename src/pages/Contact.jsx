@@ -1,22 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 import Icon from '../components/Icon'
-import MapCard, { MAPS_URL } from '../components/MapCard'
+import MapCard from '../components/MapCard'
 import FormSuccess from '../components/FormSuccess'
+import { useForm } from '../hooks/useForm'
 import { useSubmit } from '../hooks/useSubmit'
-import site from '../content/site.json'
+import { isEmail } from '../lib/format'
+import { MAPS_URL, site } from '../lib/site'
 import s from './Contact.module.css'
 
 const TOPICS = ['General', 'Sunday School', 'Nikah', 'New to Islam', 'Volunteer', 'Donations']
+const COPIED_MS = 1800
 
+const EMPTY_FORM = { topic: TOPICS[0], name: '', email: '', phone: '', message: '' }
+
+function validate(v) {
+  const errors = {}
+  if (!v.name.trim()) errors.name = 'Enter your name'
+  if (!isEmail(v.email)) errors.email = 'Enter an email like name@example.com'
+  if (v.message.trim().length < 5) errors.message = 'Write a short message so we know how to help'
+  return errors
+}
+
+/** Copies `text` to the clipboard and briefly shows "Copied". */
 function CopyButton({ text, label }) {
   const [copied, setCopied] = useState(false)
+  const timer = useRef()
+  useEffect(() => () => clearTimeout(timer.current), [])
+
   const onClick = async () => {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
+      clearTimeout(timer.current)
+      timer.current = setTimeout(() => setCopied(false), COPIED_MS)
     } catch {
       setCopied(false)
     }
@@ -29,20 +47,12 @@ function CopyButton({ text, label }) {
 }
 
 function ContactForm() {
-  const empty = { topic: 'General', name: '', email: '', phone: '', message: '' }
-  const [form, setForm] = useState(empty)
-  const [errors, setErrors] = useState({})
+  const { values: form, errors, field: set, check, clear } = useForm(EMPTY_FORM, validate)
   const { status, submit, reset } = useSubmit(site.integrations.formspreeId)
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    const errs = {}
-    if (!form.name.trim()) errs.name = 'Enter your name'
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = 'Enter an email like name@example.com'
-    if (form.message.trim().length < 5) errs.message = 'Write a short message so we know how to help'
-    setErrors(errs)
-    if (Object.keys(errs).length) return
+    if (!check()) return
     await submit({ ...form, _subject: `Website message: ${form.topic}` })
   }
 
@@ -53,7 +63,7 @@ function ContactForm() {
         body="JazakAllahu khair. Someone from WMCC will get back to you soon. For anything urgent, please call."
         actionLabel="Send another message"
         onReset={() => {
-          setForm(empty)
+          clear()
           reset()
         }}
       />
@@ -70,7 +80,14 @@ function ContactForm() {
         <legend className="sr-only">Topic</legend>
         {TOPICS.map((t) => (
           <label key={t} className={`${s.topic} ${form.topic === t ? s.topicOn : ''}`}>
-            <input type="radio" name="topic" value={t} checked={form.topic === t} onChange={set('topic')} className="sr-only" />
+            <input
+              type="radio"
+              name="topic"
+              value={t}
+              checked={form.topic === t}
+              onChange={set('topic')}
+              className="sr-only"
+            />
             {t}
           </label>
         ))}
@@ -78,12 +95,27 @@ function ContactForm() {
       <div className="form-grid">
         <label className="field" htmlFor="c-name">
           Your name
-          <input id="c-name" className="input" value={form.name} onChange={set('name')} aria-invalid={!!errors.name} autoComplete="name" />
+          <input
+            id="c-name"
+            className="input"
+            value={form.name}
+            onChange={set('name')}
+            aria-invalid={!!errors.name}
+            autoComplete="name"
+          />
           {errors.name && <span className="field-error">{errors.name}</span>}
         </label>
         <label className="field" htmlFor="c-email">
           Email
-          <input id="c-email" type="email" className="input" value={form.email} onChange={set('email')} aria-invalid={!!errors.email} autoComplete="email" />
+          <input
+            id="c-email"
+            type="email"
+            className="input"
+            value={form.email}
+            onChange={set('email')}
+            aria-invalid={!!errors.email}
+            autoComplete="email"
+          />
           {errors.email && <span className="field-error">{errors.email}</span>}
         </label>
       </div>
@@ -91,14 +123,30 @@ function ContactForm() {
         <span>
           Phone <span className="hint">Optional</span>
         </span>
-        <input id="c-phone" type="tel" className="input" value={form.phone} onChange={set('phone')} autoComplete="tel" />
+        <input
+          id="c-phone"
+          type="tel"
+          className="input"
+          value={form.phone}
+          onChange={set('phone')}
+          autoComplete="tel"
+        />
       </label>
       <label className="field" htmlFor="c-message">
         Message
-        <textarea id="c-message" className="input" rows={5} value={form.message} onChange={set('message')} aria-invalid={!!errors.message} />
+        <textarea
+          id="c-message"
+          className="input"
+          rows={5}
+          value={form.message}
+          onChange={set('message')}
+          aria-invalid={!!errors.message}
+        />
         {errors.message && <span className="field-error">{errors.message}</span>}
       </label>
-      {status === 'error' && <p className="field-error">That didn't go through. Please try again, or call us at {site.phone}.</p>}
+      {status === 'error' && (
+        <p className="field-error">That didn't go through. Please try again, or call us at {site.phone}.</p>
+      )}
       <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
         {status === 'sending' ? 'Sending…' : `Send message · ${form.topic}`}
       </button>
@@ -110,7 +158,11 @@ export default function Contact() {
   const a = site.address
   return (
     <>
-      <PageHero arabic="السَّلَامُ عَلَيْكُمْ" title="Contact Us" lead="Questions, a visit, a nikah or something urgent. We're here to help." />
+      <PageHero
+        arabic="السَّلَامُ عَلَيْكُمْ"
+        title="Contact Us"
+        lead="Questions, a visit, a nikah or something urgent. We're here to help."
+      />
 
       <section className="container">
         <div className={s.cards}>
@@ -124,7 +176,7 @@ export default function Contact() {
               <br />
               {a.city}, {a.state} {a.zip}
             </span>
-            <a href={MAPS_URL} target="_blank" rel="noreferrer" className="text-link">
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="text-link">
               Get directions <Icon name="arrow" size={16} />
             </a>
           </Reveal>
@@ -159,10 +211,10 @@ export default function Contact() {
               <Icon name="instagram" />
             </span>
             <span className={s.label}>Follow</span>
-            <a href={site.social.instagram} target="_blank" rel="noreferrer" className={s.social}>
+            <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" className={s.social}>
               Instagram
             </a>
-            <a href={site.social.facebook} target="_blank" rel="noreferrer" className={s.social}>
+            <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" className={s.social}>
               Facebook
             </a>
           </Reveal>
@@ -193,13 +245,15 @@ export default function Contact() {
             </Reveal>
             <Reveal delay={0.15} className={s.ramadan}>
               <h3>Ramadan hours</h3>
-              <p>During Ramadan the masjid is open for iftar and tarawih. Please call ahead to confirm other services.</p>
+              <p>
+                During Ramadan the masjid is open for iftar and tarawih. Please call ahead to confirm other services.
+              </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="container" style={{ paddingBottom: 'clamp(64px, 9vw, 104px)' }}>
+      <section className="container section-end">
         <Reveal>
           <MapCard tall />
         </Reveal>

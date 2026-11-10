@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { usePrayerTimes } from '../hooks/usePrayerTimes'
 import { fmtTime, jumuah } from '../lib/prayer'
+import { pad2 } from '../lib/format'
 import Icon from './Icon'
 import s from './HeroPrayerCard.module.css'
 
-const pad = (n) => String(n).padStart(2, '0')
-
+/** Compact "next prayer" card with today's times, shown in the home page hero. */
 export default function HeroPrayerCard() {
   const { list, next, countdown, progress, dateLabel, hijri } = usePrayerTimes()
 
@@ -36,8 +36,8 @@ export default function HeroPrayerCard() {
               <span>h</span>{' '}
             </>
           )}
-          {pad(countdown.m)}
-          <span>m</span> {pad(countdown.s)}
+          {pad2(countdown.m)}
+          <span>m</span> {pad2(countdown.s)}
           <span>s</span>
         </p>
       </div>

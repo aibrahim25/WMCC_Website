@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import s from './Sky.module.css'
 
+/** Twinkling star field with an occasional shooting star (canvas). Static when reduced motion is on. */
 function Stars({ density = 70 }) {
   const ref = useRef(null)
   const reduce = useReducedMotion()
@@ -91,10 +92,26 @@ function Stars({ density = 70 }) {
 function MosqueSkyline({ y, y2 }) {
   return (
     <>
-      <motion.svg className={s.skyline} style={{ y: y2 }} viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-        <path d="M0 220 L0 150 Q180 120 360 138 Q560 158 760 130 Q1000 100 1220 128 Q1340 140 1440 126 L1440 220 Z" fill="#18245A" opacity="0.55" />
+      <motion.svg
+        className={s.skyline}
+        style={{ y: y2 }}
+        viewBox="0 0 1440 220"
+        preserveAspectRatio="xMidYMax slice"
+        aria-hidden="true"
+      >
+        <path
+          d="M0 220 L0 150 Q180 120 360 138 Q560 158 760 130 Q1000 100 1220 128 Q1340 140 1440 126 L1440 220 Z"
+          fill="#18245A"
+          opacity="0.55"
+        />
       </motion.svg>
-      <motion.svg className={s.skyline} style={{ y }} viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <motion.svg
+        className={s.skyline}
+        style={{ y }}
+        viewBox="0 0 1440 220"
+        preserveAspectRatio="xMidYMax slice"
+        aria-hidden="true"
+      >
         <g fill="#0B1130">
           <path d="M0 220 L0 176 Q260 158 520 170 Q720 180 900 166 Q1160 148 1440 168 L1440 220 Z" />
           <rect x="612" y="132" width="216" height="88" />
@@ -119,12 +136,12 @@ function MosqueSkyline({ y, y2 }) {
   )
 }
 
-function Hills({ y, ground }) {
+function Hills({ ground }) {
   return (
-    <motion.svg className={s.skyline} style={{ y }} viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+    <svg className={s.skyline} viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0 110 L0 60 Q240 26 480 50 Q720 74 960 44 Q1200 16 1440 46 L1440 110 Z" fill={ground} opacity="0.45" />
       <path d="M0 110 L0 78 Q300 54 620 74 Q900 92 1180 66 Q1320 56 1440 70 L1440 110 Z" fill={ground} />
-    </motion.svg>
+    </svg>
   )
 }
 

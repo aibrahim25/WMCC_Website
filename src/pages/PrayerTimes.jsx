@@ -5,13 +5,15 @@ import Reveal from '../components/Reveal'
 import Segmented from '../components/Segmented'
 import Icon from '../components/Icon'
 import { usePrayerTimes } from '../hooks/usePrayerTimes'
-import { calcDay, fmtTime, jumuah, PRAYERS } from '../lib/prayer'
-import site from '../content/site.json'
+import { addMonths, calcDay, fmtTime, jumuah, partsInTz, PRAYERS } from '../lib/prayer'
+import { pad2 } from '../lib/format'
+import { site } from '../lib/site'
 import s from './PrayerTimes.module.css'
 
-const pad = (n) => String(n).padStart(2, '0')
+const FRIDAY = 5
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
+/** Live countdown, today's prayer cards and an athan/iqama toggle. */
 function Today() {
   const { list, next, countdown, progress, dateLabel, hijri } = usePrayerTimes()
   const [mode, setMode] = useState('athan')
@@ -29,7 +31,7 @@ function Today() {
               {next.name} in{' '}
               <span className={`${s.count} tabular`}>
                 {countdown.h > 0 && `${countdown.h}:`}
-                {pad(countdown.m)}:{pad(countdown.s)}
+                {pad2(countdown.m)}:{pad2(countdown.s)}
               </span>
             </p>
             <div className={s.track} aria-hidden="true">
@@ -55,7 +57,11 @@ function Today() {
         <div className={s.cards}>
           {list.map((p, i) => {
             const main = p.noIqama || mode === 'athan' ? p.athan : p.iqama
-            const sub = p.noIqama ? 'Sunrise, no prayer' : mode === 'athan' ? `Iqama ${fmtTime(p.iqama)}` : `Athan ${fmtTime(p.athan)}`
+            const sub = p.noIqama
+              ? 'Sunrise, no prayer'
+              : mode === 'athan'
+                ? `Iqama ${fmtTime(p.iqama)}`
+                : `Athan ${fmtTime(p.athan)}`
             return (
               <motion.div
                 key={p.key}
@@ -93,20 +99,12 @@ function Today() {
   )
 }
 
+/** Athan times for a whole month, with previous/next month navigation. */
 function Timetable() {
-  const { today } = usePrayerTimesStatic()
+  // The table only needs today's date, so it doesn't subscribe to the ticking clock.
+  const [today] = useState(() => partsInTz(Date.now()))
   const [offset, setOffset] = useState(0)
-
-  let vm = today.m + offset
-  let vy = today.y
-  while (vm > 12) {
-    vm -= 12
-    vy += 1
-  }
-  while (vm < 1) {
-    vm += 12
-    vy -= 1
-  }
+  const { y: vy, m: vm } = addMonths(today, offset)
 
   const rows = useMemo(() => {
     const days = new Date(Date.UTC(vy, vm, 0)).getUTCDate()
@@ -118,7 +116,11 @@ function Timetable() {
     })
   }, [vy, vm, today.y, today.m, today.d])
 
-  const monthLabel = new Date(Date.UTC(vy, vm - 1, 15)).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', year: 'numeric' })
+  const monthLabel = new Date(Date.UTC(vy, vm - 1, 15)).toLocaleDateString('en-US', {
+    timeZone: 'UTC',
+    month: 'long',
+    year: 'numeric',
+  })
 
   return (
     <section className="section container" aria-labelledby="timetable-title">
@@ -126,7 +128,15 @@ function Timetable() {
         <div>
           <span className="eyebrow">Monthly timetable</span>
           <AnimatePresence mode="wait" initial={false}>
-            <motion.h2 key={monthLabel} id="timetable-title" className="h2" initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.2 }}>
+            <motion.h2
+              key={monthLabel}
+              id="timetable-title"
+              className="h2"
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -12 }}
+              transition={{ duration: 0.2 }}
+            >
               {monthLabel}
             </motion.h2>
           </AnimatePresence>
@@ -159,13 +169,13 @@ function Timetable() {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.d} className={`${r.isToday ? s.rowToday : ''} ${r.wd === 5 ? s.rowFri : ''}`}>
+              <tr key={r.d} className={`${r.isToday ? s.rowToday : ''} ${r.wd === FRIDAY ? s.rowFri : ''}`}>
                 <th scope="row">
                   <span className={s.dCell}>
                     <span className={`${s.dNum} tabular`}>{r.d}</span>
                     <span className={s.dDay}>
                       {DAYS[r.wd]}
-                      {r.wd === 5 && " · Jumu'ah"}
+                      {r.wd === FRIDAY && " · Jumu'ah"}
                       {r.isToday && ' · Today'}
                     </span>
                   </span>
@@ -185,21 +195,16 @@ function Timetable() {
   )
 }
 
-// The timetable only needs today's date, not a ticking clock.
-function usePrayerTimesStatic() {
-  const [today] = useState(() => {
-    const parts = new Intl.DateTimeFormat('en-US', { timeZone: site.location.timezone, year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(Date.now())
-    const get = (t) => Number(parts.find((p) => p.type === t).value)
-    return { y: get('year'), m: get('month'), d: get('day') }
-  })
-  return { today }
-}
-
 export default function PrayerTimes() {
   const off = site.prayer.iqamaOffsets
   return (
     <>
-      <PageHero arabic="أَقِمِ الصَّلَاةَ لِذِكْرِي" title="Prayer Times" lead="“Establish prayer for My remembrance.” Surah Ta-Ha 20:14" ground="var(--night)" />
+      <PageHero
+        arabic="أَقِمِ الصَّلَاةَ لِذِكْرِي"
+        title="Prayer Times"
+        lead="“Establish prayer for My remembrance.” Surah Ta-Ha 20:14"
+        ground="var(--night)"
+      />
       <Today />
 
       <section className="container">
@@ -208,9 +213,13 @@ export default function PrayerTimes() {
             <span className={s.jKicker}>Every Friday</span>
             <h2 className={s.jTitle}>Jumu'ah Prayer</h2>
             <p className={s.jAr} lang="ar" dir="rtl">
-              يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ
+              يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ
+              اللَّهِ
             </p>
-            <p className={s.jEn}>“O you who have believed, when the call is made for prayer on Friday, hasten to the remembrance of Allah.” Surah Al-Jumu'ah 62:9</p>
+            <p className={s.jEn}>
+              “O you who have believed, when the call is made for prayer on Friday, hasten to the remembrance of Allah.”
+              Surah Al-Jumu'ah 62:9
+            </p>
           </div>
           <div className={s.jTimes}>
             <div className={s.jBox}>
@@ -227,7 +236,7 @@ export default function PrayerTimes() {
 
       <Timetable />
 
-      <section className="container" style={{ paddingBottom: 'clamp(64px, 9vw, 104px)' }}>
+      <section className="container section-end">
         <div className={s.info}>
           <Reveal className={s.infoCard}>
             <span className={s.infoIcon}>
@@ -235,7 +244,8 @@ export default function PrayerTimes() {
             </span>
             <h3>Calculation method</h3>
             <p>
-              Islamic Society of North America (ISNA), with Fajr and Isha at {site.prayer.fajrAngle}°. Calculated for Windham, NH at {site.location.lat.toFixed(2)}°N, {Math.abs(site.location.lng).toFixed(2)}°W.
+              Islamic Society of North America (ISNA), with Fajr and Isha at {site.prayer.fajrAngle}°. Calculated for
+              Windham, NH at {site.location.lat.toFixed(2)}°N, {Math.abs(site.location.lng).toFixed(2)}°W.
             </p>
           </Reveal>
           <Reveal delay={0.06} className={s.infoCard}>
@@ -244,7 +254,8 @@ export default function PrayerTimes() {
             </span>
             <h3>Iqama policy</h3>
             <p>
-              Iqama is {off.fajr} minutes after athan for Fajr, Dhuhr, Asr and Isha. Maghrib iqama is {off.maghrib} minutes after athan. Jumu'ah iqama is {jumuah.iqama}.
+              Iqama is {off.fajr} minutes after athan for Fajr, Dhuhr, Asr and Isha. Maghrib iqama is {off.maghrib}{' '}
+              minutes after athan. Jumu'ah iqama is {jumuah.iqama}.
             </p>
           </Reveal>
           <Reveal delay={0.12} className={s.infoCard}>
@@ -252,7 +263,10 @@ export default function PrayerTimes() {
               <Icon name="shield" />
             </span>
             <h3>Always up to date</h3>
-            <p>Times are calculated right here on the page every day, including daylight saving changes, so they never get stuck loading.</p>
+            <p>
+              Times are calculated right here on the page every day, including daylight saving changes, so they never
+              get stuck loading.
+            </p>
           </Reveal>
         </div>
       </section>

@@ -10,37 +10,66 @@
       "title": "Quran Tadabbur & Asma-ul-Husna",
       "arabic": "القرآن",
       "teacher": "Sr. Sumaya",
-      "points": ["Meanings and explanations of Juz Amma", "Arabic vocabulary from the Quranic text", "The 99 names of Allah and their meanings", "Living by what the Quran teaches"]
+      "points": [
+        "Meanings and explanations of Juz Amma",
+        "Arabic vocabulary from the Quranic text",
+        "The 99 names of Allah and their meanings",
+        "Living by what the Quran teaches"
+      ]
     },
     {
       "title": "Islamic Studies",
       "arabic": "الدراسات الإسلامية",
       "teacher": "Sr. Tasneem",
-      "points": ["Knowing Allah and the Islamic faith", "The Five Pillars of Islam", "Islamic morals and values", "Age-appropriate ethical questions"]
+      "points": [
+        "Knowing Allah and the Islamic faith",
+        "The Five Pillars of Islam",
+        "Islamic morals and values",
+        "Age-appropriate ethical questions"
+      ]
     },
     {
       "title": "Seerah of Prophet Muhammad ﷺ",
       "arabic": "السيرة",
       "teacher": "Br. Guenena",
-      "points": ["The Prophet's life from start to finish", "Arabia before Islam", "His character and teachings", "Practical lessons for today"]
+      "points": [
+        "The Prophet's life from start to finish",
+        "Arabia before Islam",
+        "His character and teachings",
+        "Practical lessons for today"
+      ]
     },
     {
       "title": "Beginner Arabic",
       "arabic": "العربية",
       "teacher": "Br. Ijaz",
-      "points": ["The Arabic alphabet", "Basic reading and writing", "Learning paths for each student", "Interactive practice"]
+      "points": [
+        "The Arabic alphabet",
+        "Basic reading and writing",
+        "Learning paths for each student",
+        "Interactive practice"
+      ]
     },
     {
       "title": "Public Speaking",
       "arabic": "الخطابة",
       "teacher": "Sr. Tahseen",
-      "points": ["Confidence and communication", "Persuasive speaking", "Critical thinking and respectful debate", "Leadership and problem solving"]
+      "points": [
+        "Confidence and communication",
+        "Persuasive speaking",
+        "Critical thinking and respectful debate",
+        "Leadership and problem solving"
+      ]
     }
   ],
   "times": ["10:00 – 10:40 AM", "10:40 – 11:20 AM", "11:20 – 11:35 AM", "11:35 AM – 12:15 PM", "12:15 – 12:55 PM"],
   "groups": [
     { "id": "6-8", "label": "Ages 6–8", "slots": ["Arabic", "Quran", "Break", "Seerah", "Islamic Studies"] },
     { "id": "9-11", "label": "Ages 9–11", "slots": ["Public Speaking", "Islamic Studies", "Break", "Quran", "Seerah"] },
-    { "id": "12-15", "label": "Ages 12–15", "slots": ["Public Speaking", "Seerah", "Break", "Islamic Studies", "Quran"] }
+    {
+      "id": "12-15",
+      "label": "Ages 12–15",
+      "slots": ["Public Speaking", "Seerah", "Break", "Islamic Studies", "Quran"]
+    }
   ]
 }

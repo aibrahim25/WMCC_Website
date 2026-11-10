@@ -1,12 +1,34 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { dateLabel, gcalLink, timeRange } from '../lib/events'
-import { CATEGORY_LABEL, DateBadge } from './EventCard'
+import { categoryLabel, dateLabel, eventLocation, gcalLink, timeRange } from '../lib/events'
+import { DateBadge } from './EventCard'
 import Icon from './Icon'
 import s from './EventModal.module.css'
 
+const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+/** Keeps Tab / Shift+Tab focus inside `container`. */
+function trapFocus(e, container) {
+  const items = container?.querySelectorAll(FOCUSABLE)
+  if (!items?.length) return
+  const first = items[0]
+  const last = items[items.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
+/**
+ * Accessible event details dialog. Renders nothing when `ev` is null.
+ * Locks page scroll, closes on Escape or backdrop click, traps focus and restores it on close.
+ */
 export default function EventModal({ ev, onClose }) {
+  const dialogRef = useRef(null)
   const closeRef = useRef(null)
 
   useEffect(() => {
@@ -14,7 +36,10 @@ export default function EventModal({ ev, onClose }) {
     const prev = document.activeElement
     closeRef.current?.focus()
     document.body.style.overflow = 'hidden'
-    const onKey = (e) => e.key === 'Escape' && onClose()
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'Tab') trapFocus(e, dialogRef.current)
+    }
     window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = ''
@@ -29,8 +54,15 @@ export default function EventModal({ ev, onClose }) {
   return (
     <AnimatePresence>
       {ev && (
-        <motion.div className={s.overlay} onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div
+          className={s.overlay}
+          onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="event-title"
@@ -44,7 +76,7 @@ export default function EventModal({ ev, onClose }) {
             <div className={s.head}>
               <DateBadge ev={ev} />
               <div className={s.headText}>
-                <span className={s.cat}>{CATEGORY_LABEL[ev.category] || 'Community'}</span>
+                <span className={s.cat}>{categoryLabel(ev.category)}</span>
                 <h2 id="event-title" className={s.title}>
                   {ev.title}
                 </h2>
@@ -69,7 +101,7 @@ export default function EventModal({ ev, onClose }) {
                 <dt>
                   <Icon name="pin" size={18} /> Where
                 </dt>
-                <dd>{ev.location || 'WMCC, Windham NH'}</dd>
+                <dd>{eventLocation(ev)}</dd>
               </div>
               {ev.audience && (
                 <div>
@@ -95,7 +127,7 @@ export default function EventModal({ ev, onClose }) {
 
             <div className={s.actions}>
               {cal && (
-                <a href={cal} target="_blank" rel="noreferrer" className="btn btn-primary">
+                <a href={cal} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                   <Icon name="calendar" size={18} /> Add to Google Calendar
                 </a>
               )}

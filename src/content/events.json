@@ -10,7 +10,8 @@
       "location": "WMCC, Windham NH",
       "description": "A monthly gathering for Muslim youth to grow in faith, build real friendships and feel at home in the community. Every night has Islamic knowledge, open discussion, activities and good food, in a space grounded in brotherhood and sisterhood. Dates are posted on Instagram.",
       "tags": ["Halaqa", "Food", "Activities", "Open discussion"],
-      "featured": true
+      "featured": true,
+      "highlight": { "value": "14–25", "label": "years old · brothers and sisters meet separately" }
     },
     {
       "id": "jumuah",

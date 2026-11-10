@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion'
-import { MONTHS_SHORT, timeRange } from '../lib/events'
+import { categoryLabel, MONTHS_SHORT, timeRange } from '../lib/events'
 import Icon from './Icon'
 import s from './EventCard.module.css'
 
-export const CATEGORY_LABEL = { youth: 'Youth', classes: 'Classes', sisters: 'Sisters', community: 'Community' }
-
+/** Calendar-style badge showing the event's next date, or "Weekly"/"Ongoing" when it has none. */
 export function DateBadge({ ev, className = '' }) {
   const r = ev.recurrence?.type
   return (
@@ -24,6 +23,7 @@ export function DateBadge({ ev, className = '' }) {
   )
 }
 
+/** Clickable event summary. `onOpen(ev)` opens the details dialog. */
 export default function EventCard({ ev, onOpen }) {
   const time = timeRange(ev)
   return (
@@ -38,7 +38,7 @@ export default function EventCard({ ev, onOpen }) {
       <button type="button" className={s.hit} onClick={() => onOpen(ev)} aria-label={`${ev.title}: details`}>
         <DateBadge ev={ev} />
         <div className={s.body}>
-          <span className={s.cat}>{CATEGORY_LABEL[ev.category] || 'Community'}</span>
+          <span className={s.cat}>{categoryLabel(ev.category)}</span>
           <h3 className={s.title}>{ev.title}</h3>
           <p className={s.when}>
             {ev.schedule}

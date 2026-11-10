@@ -116,7 +116,7 @@
 
 /* Jumu'ah */
 .jumuah {
-  margin-top: clamp(64px, 9vw, 104px);
+  margin-top: var(--section-space);
   border-radius: 34px;
   padding: 48px;
   display: flex;
@@ -207,7 +207,9 @@
   align-items: center;
   justify-content: center;
   font: 700 14px var(--body);
-  transition: border-color 0.2s, background-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
 }
 .round {
   width: 48px;

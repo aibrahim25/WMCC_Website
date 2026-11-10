@@ -1,61 +1,68 @@
-import { useEffect, useMemo, useState } from 'react'
-import { PRAYERS, PRAYER_ORDER, calcDay, partsInTz, addDays, hijriLabel, iqamaFor, TZ } from '../lib/prayer'
+import { useMemo } from 'react'
+import { addDays, calcDay, fmtLongDate, hijriLabel, iqamaFor, partsInTz, PRAYER_ORDER, PRAYERS } from '../lib/prayer'
+import { useNow } from './useNow'
 
-export function useNow(interval = 1000) {
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), interval)
-    return () => clearInterval(id)
-  }, [interval])
-  return now
-}
+const HOUR = 3600000
+const MINUTE = 60000
 
-// Today's prayer times for Windham plus a live countdown to the next one.
+/**
+ * Today's prayer times in Windham with a live countdown to the next prayer. Re-renders every second.
+ *
+ * After Isha, "next" is tomorrow's Fajr.
+ */
 export function usePrayerTimes() {
   const now = useNow(1000)
-  const today = partsInTz(now)
-  const key = `${today.y}-${today.m}-${today.d}`
+  const { y, m, d } = partsInTz(now)
 
-  const { t, tomorrowFajr, yesterdayIsha } = useMemo(() => {
-    const tm = addDays(today, 1)
-    const yd = addDays(today, -1)
+  // Recalculate only when the date changes, not every tick.
+  const { times, tomorrowFajr, yesterdayIsha } = useMemo(() => {
+    const today = { y, m, d }
+    const tomorrow = addDays(today, 1)
+    const yesterday = addDays(today, -1)
     return {
-      t: calcDay(today.y, today.m, today.d),
-      tomorrowFajr: calcDay(tm.y, tm.m, tm.d).fajr,
-      yesterdayIsha: calcDay(yd.y, yd.m, yd.d).isha,
+      times: calcDay(y, m, d),
+      tomorrowFajr: calcDay(tomorrow.y, tomorrow.m, tomorrow.d).fajr,
+      yesterdayIsha: calcDay(yesterday.y, yesterday.m, yesterday.d).isha,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key])
+  }, [y, m, d])
 
-  let nextKey = PRAYER_ORDER.find((k) => t[k] > now)
-  const nextAt = nextKey ? t[nextKey] : tomorrowFajr
-  const idx = nextKey ? PRAYER_ORDER.indexOf(nextKey) : PRAYER_ORDER.length
-  if (!nextKey) nextKey = 'fajr'
-  const prevAt = idx === 0 ? yesterdayIsha : t[PRAYER_ORDER[idx - 1]]
+  const upcomingKey = PRAYER_ORDER.find((key) => times[key] > now)
+  const nextKey = upcomingKey || 'fajr'
+  const nextAt = upcomingKey ? times[upcomingKey] : tomorrowFajr
 
+  // Progress through the gap between the previous prayer and the next one, 0–1.
+  const nextIndex = upcomingKey ? PRAYER_ORDER.indexOf(upcomingKey) : PRAYER_ORDER.length
+  const prevAt = nextIndex === 0 ? yesterdayIsha : times[PRAYER_ORDER[nextIndex - 1]]
   const progress = Math.min(1, Math.max(0, (now - prevAt) / (nextAt - prevAt)))
-  const diff = Math.max(0, nextAt - now)
+
+  const remaining = Math.max(0, nextAt - now)
   const countdown = {
-    h: Math.floor(diff / 3600000),
-    m: Math.floor((diff % 3600000) / 60000),
-    s: Math.floor((diff % 60000) / 1000),
+    h: Math.floor(remaining / HOUR),
+    m: Math.floor((remaining % HOUR) / MINUTE),
+    s: Math.floor((remaining % MINUTE) / 1000),
   }
 
   const list = PRAYERS.map((p) => ({
     ...p,
-    athan: t[p.key],
-    iqama: p.noIqama ? null : iqamaFor(p.key, t[p.key]),
-    isNext: p.key === nextKey && t[p.key] === nextAt,
+    athan: times[p.key],
+    iqama: p.noIqama ? null : iqamaFor(p.key, times[p.key]),
+    // Only highlight a row when the next prayer is today (not tomorrow's Fajr).
+    isNext: p.key === nextKey && times[p.key] === nextAt,
   }))
 
   return {
     now,
-    today,
+    today: { y, m, d },
     list,
-    next: { key: nextKey, name: PRAYERS.find((p) => p.key === nextKey).name, at: nextAt, iqama: iqamaFor(nextKey, nextAt) },
+    next: {
+      key: nextKey,
+      name: PRAYERS.find((p) => p.key === nextKey).name,
+      at: nextAt,
+      iqama: iqamaFor(nextKey, nextAt),
+    },
     progress,
     countdown,
-    dateLabel: new Date(now).toLocaleDateString('en-US', { timeZone: TZ, weekday: 'long', month: 'long', day: 'numeric' }),
+    dateLabel: fmtLongDate(now),
     hijri: hijriLabel(now),
   }
 }

@@ -1,3 +1,4 @@
+/** WMCC masjid outline mark. Decorative; pair it with visible text or an aria-label. */
 export default function Logo({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">

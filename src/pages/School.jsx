@@ -6,11 +6,14 @@ import Reveal from '../components/Reveal'
 import Segmented from '../components/Segmented'
 import Icon from '../components/Icon'
 import FormSuccess from '../components/FormSuccess'
+import { useForm } from '../hooks/useForm'
 import { useSubmit } from '../hooks/useSubmit'
+import { isEmail } from '../lib/format'
+import { site } from '../lib/site'
 import school from '../content/school.json'
-import site from '../content/site.json'
 import s from './School.module.css'
 
+/** Header gradients for the course cards, cycled in order. */
 const BANDS = [
   'linear-gradient(120deg, #18245A, #3E5A9E)',
   'linear-gradient(120deg, #2D4687, #8E83BF)',
@@ -20,9 +23,21 @@ const BANDS = [
 ]
 
 const FEATURES = [
-  { icon: 'book', title: 'A full curriculum', body: 'Structured classes covering Quran, Islamic Studies, Seerah, Arabic and public speaking.' },
-  { icon: 'users', title: 'Dedicated volunteer teachers', body: 'Qualified instructors from our own community who know the kids by name.' },
-  { icon: 'sparkle', title: 'Hands-on learning', body: 'An engaging classroom where kids ask questions, discuss and take part.' },
+  {
+    icon: 'book',
+    title: 'A full curriculum',
+    body: 'Structured classes covering Quran, Islamic Studies, Seerah, Arabic and public speaking.',
+  },
+  {
+    icon: 'users',
+    title: 'Dedicated volunteer teachers',
+    body: 'Qualified instructors from our own community who know the kids by name.',
+  },
+  {
+    icon: 'sparkle',
+    title: 'Hands-on learning',
+    body: 'An engaging classroom where kids ask questions, discuss and take part.',
+  },
 ]
 
 function Schedule() {
@@ -36,14 +51,28 @@ function Schedule() {
             <span className={s.schedKicker}>Class schedule</span>
             <h2 className={s.schedTitle}>A typical Sunday</h2>
           </div>
-          <Segmented id="group" tone="dark" label="Age group" value={group} onChange={setGroup} options={school.groups.map(({ id, label }) => ({ id, label }))} />
+          <Segmented
+            id="group"
+            tone="dark"
+            label="Age group"
+            value={group}
+            onChange={setGroup}
+            options={school.groups.map(({ id, label }) => ({ id, label }))}
+          />
         </div>
         <div className={s.slots}>
           <AnimatePresence mode="wait" initial={false}>
-            <motion.ol key={group} className={s.slotList} initial="hidden" animate="show" exit="hidden" variants={{ show: { transition: { staggerChildren: 0.05 } } }}>
+            <motion.ol
+              key={group}
+              className={s.slotList}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+            >
               {g.slots.map((slot, i) => (
                 <motion.li
-                  key={i}
+                  key={school.times[i]}
                   className={`${s.slot} ${slot === 'Break' ? s.slotBreak : ''}`}
                   variants={{ hidden: { opacity: 0, x: -14 }, show: { opacity: 1, x: 0 } }}
                   transition={{ duration: 0.3 }}
@@ -60,21 +89,23 @@ function Schedule() {
   )
 }
 
+const EMPTY_REGISTRATION = { child: '', group: school.groups[0].label, parent: '', phone: '', email: '', notes: '' }
+
+function validateRegistration(v) {
+  const errors = {}
+  if (!v.child.trim()) errors.child = "Enter your child's name"
+  if (!v.parent.trim()) errors.parent = 'Enter a parent or guardian name'
+  if (!isEmail(v.email)) errors.email = 'Enter an email like name@example.com'
+  return errors
+}
+
 function Registration() {
-  const empty = { child: '', group: school.groups[0].label, parent: '', phone: '', email: '', notes: '' }
-  const [form, setForm] = useState(empty)
-  const [errors, setErrors] = useState({})
+  const { values: form, errors, field: set, check, clear } = useForm(EMPTY_REGISTRATION, validateRegistration)
   const { status, submit, reset } = useSubmit(site.integrations.schoolFormspreeId || site.integrations.formspreeId)
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    const errs = {}
-    if (!form.child.trim()) errs.child = "Enter your child's name"
-    if (!form.parent.trim()) errs.parent = 'Enter a parent or guardian name'
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = 'Enter an email like name@example.com'
-    setErrors(errs)
-    if (Object.keys(errs).length) return
+    if (!check()) return
     await submit({ ...form, _subject: `Sunday School registration: ${form.child}` })
   }
 
@@ -105,7 +136,7 @@ function Registration() {
               body="We got your registration. The school team will email you soon with next steps."
               actionLabel="Register another child"
               onReset={() => {
-                setForm(empty)
+                clear()
                 reset()
               }}
             />
@@ -114,7 +145,14 @@ function Registration() {
               <div className="form-grid">
                 <label className="field" htmlFor="reg-child">
                   Child's full name
-                  <input id="reg-child" className="input" value={form.child} onChange={set('child')} aria-invalid={!!errors.child} autoComplete="off" />
+                  <input
+                    id="reg-child"
+                    className="input"
+                    value={form.child}
+                    onChange={set('child')}
+                    aria-invalid={!!errors.child}
+                    autoComplete="off"
+                  />
                   {errors.child && <span className="field-error">{errors.child}</span>}
                 </label>
                 <label className="field" htmlFor="reg-group">
@@ -127,17 +165,39 @@ function Registration() {
                 </label>
                 <label className="field" htmlFor="reg-parent">
                   Parent or guardian
-                  <input id="reg-parent" className="input" value={form.parent} onChange={set('parent')} aria-invalid={!!errors.parent} autoComplete="name" />
+                  <input
+                    id="reg-parent"
+                    className="input"
+                    value={form.parent}
+                    onChange={set('parent')}
+                    aria-invalid={!!errors.parent}
+                    autoComplete="name"
+                  />
                   {errors.parent && <span className="field-error">{errors.parent}</span>}
                 </label>
                 <label className="field" htmlFor="reg-phone">
                   Phone <span className="hint">Optional</span>
-                  <input id="reg-phone" type="tel" className="input" value={form.phone} onChange={set('phone')} autoComplete="tel" />
+                  <input
+                    id="reg-phone"
+                    type="tel"
+                    className="input"
+                    value={form.phone}
+                    onChange={set('phone')}
+                    autoComplete="tel"
+                  />
                 </label>
               </div>
               <label className="field" htmlFor="reg-email">
                 Email
-                <input id="reg-email" type="email" className="input" value={form.email} onChange={set('email')} aria-invalid={!!errors.email} autoComplete="email" />
+                <input
+                  id="reg-email"
+                  type="email"
+                  className="input"
+                  value={form.email}
+                  onChange={set('email')}
+                  aria-invalid={!!errors.email}
+                  autoComplete="email"
+                />
                 {errors.email && <span className="field-error">{errors.email}</span>}
               </label>
               <label className="field" htmlFor="reg-notes">
@@ -146,7 +206,9 @@ function Registration() {
                 </span>
                 <textarea id="reg-notes" className="input" rows={4} value={form.notes} onChange={set('notes')} />
               </label>
-              {status === 'error' && <p className="field-error">That didn't go through. Please try again, or call us at {site.phone}.</p>}
+              {status === 'error' && (
+                <p className="field-error">That didn't go through. Please try again, or call us at {site.phone}.</p>
+              )}
               <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
                 {status === 'sending' ? 'Sending…' : 'Submit registration'}
               </button>
@@ -161,7 +223,11 @@ function Registration() {
 export default function School() {
   return (
     <>
-      <PageHero arabic="رَّبِّ زِدْنِي عِلْمًا" title="Islamic Sunday School" lead="Strong foundations in Quran, faith and character for kids ages 6 to 15.">
+      <PageHero
+        arabic="رَّبِّ زِدْنِي عِلْمًا"
+        title="Islamic Sunday School"
+        lead="Strong foundations in Quran, faith and character for kids ages 6 to 15."
+      >
         <a href="#register" className="btn btn-light">
           Register your child
         </a>
@@ -195,7 +261,7 @@ export default function School() {
         </div>
       </section>
 
-      <section className="container" style={{ paddingBottom: 'clamp(64px, 9vw, 104px)' }}>
+      <section className="container section-end">
         <Reveal className="section-head">
           <div>
             <span className="eyebrow">Our courses</span>

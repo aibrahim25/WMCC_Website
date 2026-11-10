@@ -105,7 +105,9 @@
   text-decoration: none;
   color: var(--ink);
   box-shadow: 0 16px 44px rgba(24, 36, 90, 0.12);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
 }
 .quickCard:hover {
   color: var(--ink);
@@ -372,7 +374,9 @@
   text-decoration: none;
   font-family: var(--display);
   font-size: 21px;
-  transition: transform 0.25s var(--ease), background-color 0.2s;
+  transition:
+    transform 0.25s var(--ease),
+    background-color 0.2s;
 }
 .giveFund:hover {
   color: var(--ink);

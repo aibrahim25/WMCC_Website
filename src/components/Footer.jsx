@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import site from '../content/site.json'
+import { fullAddress, site } from '../lib/site'
+import { isEmail } from '../lib/format'
 import { useSubmit } from '../hooks/useSubmit'
 import Logo from './Logo'
 import Icon from './Icon'
@@ -13,7 +14,7 @@ function Newsletter() {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
+    if (!isEmail(email)) {
       setError('Enter an email address like name@example.com')
       return
     }
@@ -50,17 +51,21 @@ function Newsletter() {
         </button>
       </div>
       {error && (
-        <span id="newsletter-error" className={s.error}>
+        <span id="newsletter-error" className={s.error} role="alert">
           {error}
         </span>
       )}
-      {status === 'error' && <span className={s.error}>That didn't go through. Please try again in a minute.</span>}
+      {status === 'error' && (
+        <span className={s.error} role="alert">
+          That didn't go through. Please try again in a minute.
+        </span>
+      )}
     </form>
   )
 }
 
 export default function Footer() {
-  const a = site.address
+  const { street, city, state } = site.address
   return (
     <footer className={s.footer}>
       <div className="container">
@@ -80,10 +85,10 @@ export default function Footer() {
             </Link>
             <p>Serving Muslims in Windham and the surrounding towns through worship, learning and service.</p>
             <div className={s.social}>
-              <a href={site.social.instagram} target="_blank" rel="noreferrer" aria-label="WMCC on Instagram">
+              <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="WMCC on Instagram">
                 <Icon name="instagram" size={20} />
               </a>
-              <a href={site.social.facebook} target="_blank" rel="noreferrer" aria-label="WMCC on Facebook">
+              <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="WMCC on Facebook">
                 <Icon name="facebook" size={20} />
               </a>
             </div>
@@ -103,7 +108,7 @@ export default function Footer() {
           <div className={s.col}>
             <span className={s.colH}>Contact</span>
             <span>
-              {a.street}, {a.city}, {a.state}
+              {street}, {city}, {state}
             </span>
             <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
             <a href={`mailto:${site.email}`}>{site.email}</a>
@@ -114,9 +119,7 @@ export default function Footer() {
           <span>
             © {new Date().getFullYear()} {site.name} · 501(c)(3) nonprofit · EIN {site.ein}
           </span>
-          <span>
-            {a.street}, {a.city}, {a.state} {a.zip}
-          </span>
+          <span>{fullAddress()}</span>
         </div>
       </div>
     </footer>

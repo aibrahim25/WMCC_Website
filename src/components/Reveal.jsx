@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion'
 
-// Gentle rise-in as a section scrolls into view. Content starts visible (never fully hidden).
+/**
+ * Gentle rise-in as an element scrolls into view. Content starts partly visible so it is never hidden
+ * if animations don't run.
+ *
+ * @param {string} as HTML tag to render (default "div")
+ */
 export default function Reveal({ children, delay = 0, as = 'div', className, style, ...rest }) {
   const Tag = motion[as]
   return (

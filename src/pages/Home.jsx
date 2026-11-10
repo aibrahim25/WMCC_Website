@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Sky from '../components/Sky'
@@ -9,35 +9,88 @@ import EventCard from '../components/EventCard'
 import EventModal from '../components/EventModal'
 import MapCard from '../components/MapCard'
 import { useEvents } from '../hooks/useEvents'
-import site from '../content/site.json'
+import { fullAddress, site } from '../lib/site'
 import school from '../content/school.json'
+import donate from '../content/donate.json'
 import s from './Home.module.css'
 
+/** Framer Motion props for the staggered hero entrance. */
 const rise = (delay) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.75, delay, ease: [0.2, 0.7, 0.2, 1] },
 })
 
-const QUICK = [
-  { to: '/donate', icon: 'heart', title: 'Give online', body: 'Sadaqah, zakat or the youth fund in under a minute.', cta: 'Donate', g: 'linear-gradient(135deg, #2D4687, #5B70B4)' },
-  { to: '/prayer-times', icon: 'clock', title: 'Prayer timetable', body: 'Athan and iqama for the whole month, plus Jumu’ah.', cta: 'See times', g: 'linear-gradient(135deg, #5B70B4, #A59BCB)' },
-  { to: '/school', icon: 'book', title: 'Enroll your child', body: 'Sunday School for ages 6 to 15, every Sunday morning.', cta: 'Register', g: 'linear-gradient(135deg, #8E83BF, #E9A58E)' },
-  { to: '/contact', icon: 'hands', title: 'Volunteer', body: 'Dinners, cleanup, teaching or the youth team.', cta: 'Get in touch', g: 'linear-gradient(135deg, #E9A58E, #F6C88E)' },
+const HOME_FUNDS = donate.funds.slice(0, 3).map((f) => f.id)
+
+const QUICK_LINKS = [
+  {
+    to: '/donate',
+    icon: 'heart',
+    title: 'Give online',
+    body: 'Sadaqah, zakat or the youth fund in under a minute.',
+    cta: 'Donate',
+    gradient: 'linear-gradient(135deg, #2D4687, #5B70B4)',
+  },
+  {
+    to: '/prayer-times',
+    icon: 'clock',
+    title: 'Prayer timetable',
+    body: 'Athan and iqama for the whole month, plus Jumu’ah.',
+    cta: 'See times',
+    gradient: 'linear-gradient(135deg, #5B70B4, #A59BCB)',
+  },
+  {
+    to: '/school',
+    icon: 'book',
+    title: 'Enroll your child',
+    body: 'Sunday School for ages 6 to 15, every Sunday morning.',
+    cta: 'Register',
+    gradient: 'linear-gradient(135deg, #8E83BF, #E9A58E)',
+  },
+  {
+    to: '/contact',
+    icon: 'hands',
+    title: 'Volunteer',
+    body: 'Dinners, cleanup, teaching or the youth team.',
+    cta: 'Get in touch',
+    gradient: 'linear-gradient(135deg, #E9A58E, #F6C88E)',
+  },
 ]
 
 const SERVICES = [
-  { icon: 'rings', title: 'Nikah', body: 'Marriage ceremonies officiated at the masjid. Reach out a few weeks ahead.', cta: 'Request a nikah' },
-  { icon: 'leaf', title: 'Janazah', body: 'Funeral prayer and support for grieving families. Call us right away.', cta: 'Call the masjid' },
-  { icon: 'sparkle', title: 'New to Islam', body: 'Questions, shahada, or just curious? We would love to meet you.', cta: 'Talk to us' },
-  { icon: 'users', title: 'Counseling', body: 'Private family and personal guidance from trusted members of our community.', cta: 'Book a time' },
+  {
+    icon: 'rings',
+    title: 'Nikah',
+    body: 'Marriage ceremonies officiated at the masjid. Reach out a few weeks ahead.',
+    cta: 'Request a nikah',
+  },
+  {
+    icon: 'leaf',
+    title: 'Janazah',
+    body: 'Funeral prayer and support for grieving families. Call us right away.',
+    cta: 'Call the masjid',
+  },
+  {
+    icon: 'sparkle',
+    title: 'New to Islam',
+    body: 'Questions, shahada, or just curious? We would love to meet you.',
+    cta: 'Talk to us',
+  },
+  {
+    icon: 'users',
+    title: 'Counseling',
+    body: 'Private family and personal guidance from trusted members of our community.',
+    cta: 'Book a time',
+  },
 ]
 
 export default function Home() {
   const { events } = useEvents()
   const upcoming = events.filter((e) => e.next).slice(0, 3)
   const [active, setActive] = useState(null)
-  const sundayGroup = school.groups[0]
+  const closeEvent = useCallback(() => setActive(null), [])
+  const sampleGroup = school.groups[0]
 
   return (
     <>
@@ -60,7 +113,8 @@ export default function Home() {
               A home for the heart, <em>here in Windham</em>
             </motion.h1>
             <motion.p className={s.heroLead} {...rise(0.18)}>
-              Five daily prayers, Sunday School, youth nights and a community that shows up for one another. Everyone is welcome.
+              Five daily prayers, Sunday School, youth nights and a community that shows up for one another. Everyone is
+              welcome.
             </motion.p>
             <motion.div className={s.heroCtas} {...rise(0.26)}>
               <Link to="/contact" className="btn btn-light">
@@ -77,10 +131,10 @@ export default function Home() {
 
       <section className={`container ${s.quick}`} aria-label="Quick links">
         <div className={s.quickGrid}>
-          {QUICK.map((q, i) => (
+          {QUICK_LINKS.map((q, i) => (
             <Reveal key={q.to} delay={i * 0.06}>
               <Link to={q.to} className={s.quickCard}>
-                <span className={s.quickIcon} style={{ background: q.g }}>
+                <span className={s.quickIcon} style={{ background: q.gradient }}>
                   <Icon name={q.icon} size={22} />
                 </span>
                 <span className={s.quickTitle}>{q.title}</span>
@@ -116,7 +170,9 @@ export default function Home() {
           <div className={s.schoolText}>
             <span className={s.schoolEyebrow}>Islamic Sunday School</span>
             <h2 className={s.schoolTitle}>Quran, Seerah and Arabic for ages 6 to 15</h2>
-            <p className={s.schoolLead}>Every Sunday, 10:00 AM to 1:00 PM. Three age groups taught by volunteer teachers from our own community.</p>
+            <p className={s.schoolLead}>
+              Every Sunday, 10:00 AM to 1:00 PM. Three age groups taught by volunteer teachers from our own community.
+            </p>
             <div className={s.schoolCtas}>
               <Link to="/school" className="btn btn-gold">
                 Register online
@@ -127,10 +183,10 @@ export default function Home() {
             </div>
           </div>
           <div className={s.schoolDay}>
-            <span className={s.schoolDayH}>A Sunday for {sundayGroup.label.toLowerCase()}</span>
+            <span className={s.schoolDayH}>A Sunday for {sampleGroup.label.toLowerCase()}</span>
             <ol className={s.slots}>
-              {sundayGroup.slots.map((slot, i) => (
-                <li key={i} className={slot === 'Break' ? s.slotBreak : ''}>
+              {sampleGroup.slots.map((slot, i) => (
+                <li key={school.times[i]} className={slot === 'Break' ? s.slotBreak : ''}>
                   <span className="tabular">{school.times[i]}</span>
                   <strong>{slot}</strong>
                 </li>
@@ -145,7 +201,10 @@ export default function Home() {
           <Reveal className={s.welcomeText}>
             <span className="eyebrow">Services</span>
             <h2 className="h2">Here for life's big moments</h2>
-            <p className="lead">From a first visit to a wedding to saying goodbye, the WMCC family is here. Reach out any time and someone will get back to you.</p>
+            <p className="lead">
+              From a first visit to a wedding to saying goodbye, the WMCC family is here. Reach out any time and someone
+              will get back to you.
+            </p>
             <Link to="/contact" className="btn btn-primary">
               Contact the masjid
             </Link>
@@ -174,10 +233,13 @@ export default function Home() {
               وَمَا تُنفِقُوا مِنْ خَيْرٍ فَلِأَنفُسِكُمْ
             </p>
             <h2 className={s.giveTitle}>Keep the lights on at WMCC</h2>
-            <p className={s.giveLead}>We run entirely on community support. Your giving covers utilities, school supplies and youth nights. Tax deductible, EIN {site.ein}.</p>
+            <p className={s.giveLead}>
+              We run entirely on community support. Your giving covers utilities, school supplies and youth nights. Tax
+              deductible, EIN {site.ein}.
+            </p>
           </div>
           <div className={s.giveActions}>
-            {['Sadaqah', 'Zakat', 'Youth fund'].map((f) => (
+            {HOME_FUNDS.map((f) => (
               <Link key={f} to="/donate" state={{ fund: f }} className={s.giveFund}>
                 <span>{f}</span>
                 <Icon name="arrow" size={18} />
@@ -195,9 +257,7 @@ export default function Home() {
             <dl className={s.visitList}>
               <div>
                 <dt>Address</dt>
-                <dd>
-                  {site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}
-                </dd>
+                <dd>{fullAddress()}</dd>
               </div>
               <div>
                 <dt>Open</dt>
@@ -218,7 +278,7 @@ export default function Home() {
         </div>
       </section>
 
-      <EventModal ev={active} onClose={() => setActive(null)} />
+      <EventModal ev={active} onClose={closeEvent} />
     </>
   )
 }
