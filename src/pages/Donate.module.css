@@ -1,0 +1,241 @@
+.layout {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: 24px;
+  align-items: start;
+}
+.builder {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  min-width: 0;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.stepH {
+  font-size: 26px;
+}
+.funds {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.fund {
+  text-align: left;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.25s var(--ease);
+}
+.fund:hover {
+  border-color: var(--periwinkle);
+  transform: translateY(-2px);
+}
+.fundOn {
+  border-color: var(--ink);
+  background: #f3f2fb;
+}
+.fundTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.fundTop strong {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 21px;
+}
+.fundBody {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #c6c1d8;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.fundOn .radio {
+  border-color: var(--ink);
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.amounts {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.amount {
+  min-height: 56px;
+  border-radius: 16px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font: 500 20px var(--display);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+.amount:hover {
+  border-color: var(--ink);
+}
+.amountOn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+.custom {
+  width: 100%;
+  max-width: 320px;
+}
+.customWrap {
+  position: relative;
+  display: block;
+}
+.customWrap > span {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: var(--soft);
+}
+.customWrap :global(.input) {
+  padding-left: 32px;
+}
+
+.summary {
+  position: sticky;
+  top: calc(var(--nav-h) + 24px);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  color: var(--white);
+  background: linear-gradient(160deg, #18245a 0%, #2d4687 50%, #8e83bf 85%, #e9a58e 120%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-lg);
+  min-width: 0;
+}
+.sumKicker {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--peach);
+}
+.sumAmount {
+  font-family: var(--display);
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.sumAmount span {
+  font-size: 20px;
+  color: var(--on-dark);
+}
+.sumFund {
+  font-size: 17px;
+  color: var(--on-dark);
+  margin-bottom: 10px;
+}
+.sumBtn {
+  width: 100%;
+  white-space: normal;
+  text-align: center;
+  padding-block: 12px;
+}
+.sumNote {
+  font-size: 14px;
+  color: var(--on-dark);
+}
+.trust {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--on-dark);
+}
+.trust li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.trust svg {
+  color: var(--peach);
+  flex-shrink: 0;
+}
+
+.other {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.otherCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.otherCard h3 {
+  font-size: 22px;
+}
+.otherCard p {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 980px) {
+  .layout,
+  .other {
+    grid-template-columns: 1fr;
+  }
+  .summary {
+    position: static;
+  }
+}
+@media (max-width: 560px) {
+  .builder {
+    padding: 26px 20px;
+  }
+  .funds {
+    grid-template-columns: 1fr;
+  }
+  .amounts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

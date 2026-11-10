@@ -1,0 +1,100 @@
+{
+  "events": [
+    {
+      "id": "youth-program",
+      "title": "WMCC Youth Program",
+      "category": "youth",
+      "audience": "Ages 14–25 · brothers and sisters meet separately",
+      "schedule": "One Saturday each month",
+      "recurrence": { "type": "none" },
+      "location": "WMCC, Windham NH",
+      "description": "A monthly gathering for Muslim youth to grow in faith, build real friendships and feel at home in the community. Every night has Islamic knowledge, open discussion, activities and good food, in a space grounded in brotherhood and sisterhood. Dates are posted on Instagram.",
+      "tags": ["Halaqa", "Food", "Activities", "Open discussion"],
+      "featured": true
+    },
+    {
+      "id": "jumuah",
+      "title": "Jumu'ah Prayer",
+      "category": "community",
+      "audience": "Everyone welcome",
+      "schedule": "Every Friday",
+      "recurrence": { "type": "weekly", "weekday": 5 },
+      "start": "13:00",
+      "end": "14:00",
+      "location": "WMCC Prayer Hall",
+      "description": "Weekly Friday khutbah at 1:00 PM followed by prayer. Iqama is at 1:30 PM.",
+      "tags": ["Khutbah", "Prayer"]
+    },
+    {
+      "id": "monthly-halaqa",
+      "title": "Monthly Halaqa",
+      "category": "community",
+      "audience": "All community members",
+      "schedule": "Third Friday of each month",
+      "recurrence": { "type": "nth", "weekday": 5, "nth": 3 },
+      "start": "19:00",
+      "end": "21:00",
+      "location": "WMCC, Windham NH",
+      "description": "Join us for our monthly halaqa where we discuss different Islamic topics and how to apply them in daily life. All community members are welcome.",
+      "tags": ["Learning", "Discussion"]
+    },
+    {
+      "id": "community-dinner",
+      "title": "Community Dinner",
+      "category": "community",
+      "audience": "Families welcome",
+      "schedule": "Last Sunday of each month",
+      "recurrence": { "type": "nth", "weekday": 0, "nth": -1 },
+      "location": "WMCC, Windham NH",
+      "description": "A monthly meal together as a community. Bring a dish to share, or just bring yourself.",
+      "tags": ["Food", "Families"]
+    },
+    {
+      "id": "sunday-school",
+      "title": "Islamic Sunday School",
+      "category": "classes",
+      "audience": "Ages 6–15 · three age groups",
+      "schedule": "Every Sunday",
+      "recurrence": { "type": "weekly", "weekday": 0 },
+      "start": "10:00",
+      "end": "13:00",
+      "location": "WMCC Main Building",
+      "description": "Quran, Islamic Studies, Seerah, Arabic and Public Speaking taught by volunteer teachers from our community.",
+      "tags": ["Quran", "Arabic", "Seerah"],
+      "link": "/school"
+    },
+    {
+      "id": "ladies-quran",
+      "title": "Ladies Quran Class",
+      "category": "sisters",
+      "audience": "For sisters",
+      "schedule": "Every Friday night",
+      "recurrence": { "type": "weekly", "weekday": 5 },
+      "location": "WMCC, Windham NH",
+      "description": "A weekly Quran class for our sisters, focused on recitation, tajweed and understanding.",
+      "tags": ["Quran", "Tajweed"]
+    },
+    {
+      "id": "hifz",
+      "title": "Hifz Class",
+      "category": "classes",
+      "audience": "Br. AbdelRahman",
+      "schedule": "Contact us for times",
+      "recurrence": { "type": "none" },
+      "location": "WMCC, Windham NH",
+      "description": "Memorization of the Holy Quran with proper tajweed and understanding.",
+      "tags": ["Quran", "Memorization"]
+    },
+    {
+      "id": "sisters-book-club",
+      "title": "Sisters Book Club",
+      "category": "sisters",
+      "audience": "For sisters",
+      "schedule": "Once a month",
+      "recurrence": { "type": "none" },
+      "location": "WMCC, Windham NH",
+      "description": "Sisters pick a book to read together. At each meeting they discuss the last book and choose the next one.",
+      "tags": ["Reading", "Discussion"]
+    }
+  ]
+}

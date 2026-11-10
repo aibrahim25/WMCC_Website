@@ -1,0 +1,54 @@
+.wrap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  max-width: 100%;
+}
+.light {
+  background: var(--white);
+  border: 1.5px solid var(--line);
+}
+.dark {
+  background: rgba(20, 27, 68, 0.9);
+  border: 1px solid #222c5a;
+}
+.btn {
+  position: relative;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: 700 14px/1 var(--body);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.light .btn {
+  color: var(--ink);
+}
+.dark .btn {
+  color: var(--on-dark);
+}
+.light .active {
+  color: var(--white);
+}
+.dark .active {
+  color: var(--ink);
+}
+.pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+}
+.light .pill {
+  background: var(--ink);
+}
+.dark .pill {
+  background: var(--peach);
+}
+.label {
+  position: relative;
+  z-index: 1;
+}

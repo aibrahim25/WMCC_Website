@@ -1,0 +1,88 @@
+.sky {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  isolation: isolate;
+}
+.home {
+  background: linear-gradient(180deg, #0b1130 0%, #18245a 24%, #2d4687 45%, #5b70b4 61%, #a59bcb 75%, #e9a58e 88%, #f6c88e 100%);
+}
+.page {
+  background: linear-gradient(180deg, #0b1130 0%, #18245a 28%, #2d4687 52%, #8e83bf 76%, #e9a58e 91%, #f6c88e 100%);
+}
+.glow {
+  position: absolute;
+  left: 50%;
+  bottom: -25%;
+  width: 130%;
+  height: 70%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(246, 200, 142, 0.55), rgba(233, 165, 142, 0.18) 45%, transparent 68%);
+  animation: breathe 10s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.moon {
+  position: absolute;
+  top: calc(var(--nav-h) + 48px);
+  right: 9%;
+  filter: drop-shadow(0 0 22px rgba(248, 227, 184, 0.6));
+  z-index: -1;
+}
+.home .moon {
+  top: calc(var(--nav-h) + 24px);
+  right: 47%;
+}
+.page .moon {
+  width: 50px;
+  height: 50px;
+  top: calc(var(--nav-h) + 30px);
+}
+.content {
+  position: relative;
+  z-index: 2;
+}
+.skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  width: 100%;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+}
+.home .skyline {
+  height: 220px;
+}
+.page .skyline {
+  height: 110px;
+}
+@media (max-width: 700px) {
+  .home .skyline {
+    height: 150px;
+  }
+  .moon {
+    right: 6%;
+    width: 46px;
+    height: 46px;
+  }
+  .home .moon {
+    display: none;
+  }
+}

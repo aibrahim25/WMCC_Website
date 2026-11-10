@@ -1,0 +1,35 @@
+{
+  "name": "Windham Muslim Community Center",
+  "shortName": "WMCC",
+  "address": { "street": "27 Roulston Rd", "city": "Windham", "state": "NH", "zip": "03087" },
+  "phone": "(603) 874-1362",
+  "phoneHref": "+16038741362",
+  "email": "contact@wmcc.org",
+  "ein": "83-2954400",
+  "social": {
+    "facebook": "https://www.facebook.com/WMCCNH",
+    "instagram": "https://www.instagram.com/wmcc_nh/"
+  },
+  "location": { "lat": 42.8, "lng": -71.3, "timezone": "America/New_York" },
+  "prayer": {
+    "method": "ISNA",
+    "fajrAngle": 15,
+    "ishaAngle": 15,
+    "asrFactor": 1,
+    "iqamaOffsets": { "fajr": 20, "dhuhr": 20, "asr": 20, "maghrib": 5, "isha": 20 },
+    "jumuah": { "khutbah": "1:00 PM", "iqama": "1:30 PM" }
+  },
+  "announcement": {
+    "enabled": true,
+    "label": "Now enrolling",
+    "text": "Sunday School meets every Sunday, 10 AM to 1 PM",
+    "link": "/school"
+  },
+  "integrations": {
+    "formspreeId": "",
+    "schoolFormspreeId": "",
+    "newsletterFormspreeId": "",
+    "donateUrl": "",
+    "eventsSheetCsv": ""
+  }
+}

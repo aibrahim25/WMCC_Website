@@ -1,0 +1,233 @@
+.cards {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #eef0fa;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+.label {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.value {
+  font-family: var(--display);
+  font-size: 21px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.card :global(.text-link) {
+  margin-top: auto;
+}
+.row :global(.text-link) {
+  margin-top: 0;
+}
+.copy {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font: 700 13px var(--body);
+  cursor: pointer;
+}
+.copy:hover {
+  border-color: var(--ink);
+}
+.cardFollow {
+  color: var(--white);
+  background: linear-gradient(150deg, #2d4687 0%, #8e83bf 60%, #e9a58e 100%);
+}
+.cardFollow .icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--white);
+}
+.cardFollow .label {
+  color: var(--moon);
+}
+.social {
+  font-family: var(--display);
+  font-size: 21px;
+  color: var(--white);
+  text-decoration: none;
+  padding: 2px 0;
+}
+.social:hover {
+  color: var(--moon);
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr);
+  gap: 24px;
+  align-items: start;
+}
+.formCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  min-width: 0;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.form > :global(.btn) {
+  align-self: flex-start;
+}
+.formTitle {
+  font-size: 36px;
+  margin-bottom: 6px;
+}
+.formLead {
+  color: var(--muted);
+}
+.topics {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.topic {
+  min-height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1.5px solid #d8d4e6;
+  background: var(--white);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.topic:hover {
+  border-color: var(--ink);
+}
+.topic:focus-within {
+  outline: 3px solid var(--peach);
+  outline-offset: 2px;
+}
+.topicOn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.urgent {
+  background: var(--night);
+  color: var(--white);
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.urgentKicker {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--peach);
+}
+.urgentText {
+  font-family: var(--display);
+  font-size: 24px;
+  line-height: 1.25;
+}
+.tips,
+.ramadan {
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tips {
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+.tips h3,
+.ramadan h3 {
+  font-size: 22px;
+}
+.tips ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.tips li::marker {
+  color: var(--coral);
+}
+.ramadan {
+  background: linear-gradient(140deg, #f6dccf 0%, #ebd9e6 55%, #dce1f2 100%);
+}
+.ramadan p {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 1040px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .formCard {
+    padding: 26px 20px;
+  }
+  .form > :global(.btn) {
+    align-self: stretch;
+  }
+}

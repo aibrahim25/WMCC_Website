@@ -1,0 +1,36 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 56px);
+  padding-bottom: 150px;
+}
+.arabic {
+  font-family: var(--arabic);
+  font-size: 28px;
+  color: var(--moon);
+  line-height: 1.4;
+}
+.title {
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.lead {
+  font-size: 18px;
+  color: var(--on-dark);
+  max-width: 58ch;
+}
+.extra {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .wrap {
+    padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 32px);
+    padding-bottom: 120px;
+  }
+}
