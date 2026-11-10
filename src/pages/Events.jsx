@@ -62,7 +62,12 @@ export default function Events() {
                 ))}
               </div>
               <div className={s.fCtas}>
-                <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                <a
+                  href={featured.instagram || site.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
                   <Icon name="instagram" size={18} /> See the next date
                 </a>
                 <Link to="/contact" className="btn btn-outline">

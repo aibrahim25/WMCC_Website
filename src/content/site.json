@@ -1,16 +1,17 @@
 {
   "name": "Windham Muslim Community Center",
   "shortName": "WMCC",
-  "address": { "street": "27 Roulston Rd", "city": "Windham", "state": "NH", "zip": "03087" },
+  "address": { "street": "40 Mammoth Rd", "city": "Londonderry", "state": "NH", "zip": "03053" },
   "phone": "(603) 874-1362",
   "phoneHref": "+16038741362",
   "email": "contact@wmcc.org",
   "ein": "83-2954400",
   "social": {
     "facebook": "https://www.facebook.com/WMCCNH",
-    "instagram": "https://www.instagram.com/wmcc_nh/"
+    "instagram": "https://www.instagram.com/wmcc_nh/",
+    "youthInstagram": "https://www.instagram.com/wmcc.youth.group/"
   },
-  "location": { "lat": 42.8, "lng": -71.3, "timezone": "America/New_York" },
+  "location": { "lat": 42.86, "lng": -71.37, "timezone": "America/New_York" },
   "prayer": {
     "method": "ISNA",
     "fajrAngle": 15,

@@ -58,30 +58,34 @@ const QUICK_LINKS = [
   },
 ]
 
-const SERVICES = [
+const PROGRAMS = [
   {
-    icon: 'rings',
-    title: 'Nikah',
-    body: 'Marriage ceremonies officiated at the masjid. Reach out a few weeks ahead.',
-    cta: 'Request a nikah',
-  },
-  {
-    icon: 'leaf',
-    title: 'Janazah',
-    body: 'Funeral prayer and support for grieving families. Call us right away.',
-    cta: 'Call the masjid',
-  },
-  {
+    to: '/contact',
     icon: 'sparkle',
     title: 'New to Islam',
     body: 'Questions, shahada, or just curious? We would love to meet you.',
     cta: 'Talk to us',
   },
   {
+    to: '/events',
     icon: 'users',
-    title: 'Counseling',
-    body: 'Private family and personal guidance from trusted members of our community.',
-    cta: 'Book a time',
+    title: 'Youth Program',
+    body: 'A monthly night of knowledge, discussion and good food for ages 14 to 25.',
+    cta: 'See the youth program',
+  },
+  {
+    to: '/events',
+    icon: 'moon',
+    title: 'Sisters',
+    body: 'A weekly Ladies Quran Class and a monthly Sisters Book Club.',
+    cta: 'See sisters programs',
+  },
+  {
+    to: '/events',
+    icon: 'book',
+    title: 'Hifz Class',
+    body: 'Memorize the Holy Quran with proper tajweed and understanding.',
+    cta: 'Ask about times',
   },
 ]
 
@@ -110,7 +114,7 @@ export default function Home() {
               بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
             </motion.p>
             <motion.h1 className={s.title} {...rise(0.1)}>
-              A home for the heart, <em>here in Windham</em>
+              A home for the heart, <em>here in Londonderry</em>
             </motion.h1>
             <motion.p className={s.heroLead} {...rise(0.18)}>
               Five daily prayers, Sunday School, youth nights and a community that shows up for one another. Everyone is
@@ -169,9 +173,9 @@ export default function Home() {
         <Reveal className={s.school}>
           <div className={s.schoolText}>
             <span className={s.schoolEyebrow}>Islamic Sunday School</span>
-            <h2 className={s.schoolTitle}>Quran, Seerah and Arabic for ages 6 to 15</h2>
+            <h2 className={s.schoolTitle}>Qur'an, Islamic Studies and Arabic for ages 6 to 15</h2>
             <p className={s.schoolLead}>
-              Every Sunday, 10:00 AM to 1:00 PM. Three age groups taught by volunteer teachers from our own community.
+              Every Sunday, 10:00 AM to 1:00 PM. Three groups taught by volunteer teachers from our own community.
             </p>
             <div className={s.schoolCtas}>
               <Link to="/school" className="btn btn-gold">
@@ -183,12 +187,12 @@ export default function Home() {
             </div>
           </div>
           <div className={s.schoolDay}>
-            <span className={s.schoolDayH}>A Sunday for {sampleGroup.label.toLowerCase()}</span>
+            <span className={s.schoolDayH}>A Sunday for {sampleGroup.label}</span>
             <ol className={s.slots}>
               {sampleGroup.slots.map((slot, i) => (
-                <li key={school.times[i]} className={slot === 'Break' ? s.slotBreak : ''}>
+                <li key={school.times[i]} className={slot.break ? s.slotBreak : ''}>
                   <span className="tabular">{school.times[i]}</span>
-                  <strong>{slot}</strong>
+                  <strong>{slot.name}</strong>
                 </li>
               ))}
             </ol>
@@ -199,25 +203,25 @@ export default function Home() {
       <section className="section container">
         <div className={s.welcome}>
           <Reveal className={s.welcomeText}>
-            <span className="eyebrow">Services</span>
-            <h2 className="h2">Here for life's big moments</h2>
+            <span className="eyebrow">Programs</span>
+            <h2 className="h2">Something for everyone</h2>
             <p className="lead">
-              From a first visit to a wedding to saying goodbye, the WMCC family is here. Reach out any time and someone
-              will get back to you.
+              Whether it's your first visit or you're looking for a class, the WMCC family is here. Reach out any time
+              and someone will get back to you.
             </p>
             <Link to="/contact" className="btn btn-primary">
               Contact the masjid
             </Link>
           </Reveal>
           <div className={s.services}>
-            {SERVICES.map((sv, i) => (
+            {PROGRAMS.map((sv, i) => (
               <Reveal key={sv.title} delay={i * 0.06} className={s.service}>
                 <span className={s.serviceIcon}>
                   <Icon name={sv.icon} size={22} />
                 </span>
                 <h3>{sv.title}</h3>
                 <p>{sv.body}</p>
-                <Link to="/contact" className="text-link">
+                <Link to={sv.to} className="text-link">
                   {sv.cta} <Icon name="arrow" size={16} />
                 </Link>
               </Reveal>

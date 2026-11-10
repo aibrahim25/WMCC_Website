@@ -83,7 +83,9 @@ export default function Footer() {
               <Logo size={36} />
               <span>WMCC</span>
             </Link>
-            <p>Serving Muslims in Windham and the surrounding towns through worship, learning and service.</p>
+            <p>
+              Serving Muslims in Londonderry, Windham and the surrounding towns through worship, learning and service.
+            </p>
             <div className={s.social}>
               <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="WMCC on Instagram">
                 <Icon name="instagram" size={20} />

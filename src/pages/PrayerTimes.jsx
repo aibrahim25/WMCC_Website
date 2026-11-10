@@ -245,7 +245,8 @@ export default function PrayerTimes() {
             <h3>Calculation method</h3>
             <p>
               Islamic Society of North America (ISNA), with Fajr and Isha at {site.prayer.fajrAngle}°. Calculated for
-              Windham, NH at {site.location.lat.toFixed(2)}°N, {Math.abs(site.location.lng).toFixed(2)}°W.
+              {site.address.city}, {site.address.state} at {site.location.lat.toFixed(2)}°N,{' '}
+              {Math.abs(site.location.lng).toFixed(2)}°W.
             </p>
           </Reveal>
           <Reveal delay={0.06} className={s.infoCard}>

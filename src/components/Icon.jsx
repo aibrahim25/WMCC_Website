@@ -43,15 +43,7 @@ const PATHS = {
       <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6" />
     </>
   ),
-  rings: (
-    <>
-      <circle cx="9" cy="14" r="5" />
-      <circle cx="15" cy="14" r="5" />
-      <path d="M10 4h4l-2 3z" />
-    </>
-  ),
   moon: <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />,
-  leaf: <path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15zM5 19l7-7" />,
   instagram: (
     <>
       <rect x="3" y="3" width="18" height="18" rx="5" />

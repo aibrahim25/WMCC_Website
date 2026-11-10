@@ -2,25 +2,25 @@
   "facts": [
     { "label": "When", "value": "Every Sunday" },
     { "label": "Time", "value": "10:00 AM – 1:00 PM" },
-    { "label": "Ages", "value": "6–8 · 9–11 · 12–15" },
+    { "label": "Groups", "value": "Group 1 · Group 2 · Group 3" },
     { "label": "Where", "value": "WMCC Main Building" }
   ],
   "courses": [
     {
-      "title": "Quran Tadabbur & Asma-ul-Husna",
+      "title": "Qur'an Studies",
       "arabic": "القرآن",
-      "teacher": "Sr. Sumaya",
+      "teacher": "Sr. Sumiah",
       "points": [
-        "Meanings and explanations of Juz Amma",
+        "Recitation with proper tajweed",
+        "Meanings and explanations of the surahs",
         "Arabic vocabulary from the Quranic text",
-        "The 99 names of Allah and their meanings",
         "Living by what the Quran teaches"
       ]
     },
     {
       "title": "Islamic Studies",
       "arabic": "الدراسات الإسلامية",
-      "teacher": "Sr. Tasneem",
+      "teacher": "Sr. Sarah & Br. Ubido",
       "points": [
         "Knowing Allah and the Islamic faith",
         "The Five Pillars of Islam",
@@ -29,47 +29,61 @@
       ]
     },
     {
-      "title": "Seerah of Prophet Muhammad ﷺ",
-      "arabic": "السيرة",
-      "teacher": "Br. Guenena",
-      "points": [
-        "The Prophet's life from start to finish",
-        "Arabia before Islam",
-        "His character and teachings",
-        "Practical lessons for today"
-      ]
-    },
-    {
-      "title": "Beginner Arabic",
+      "title": "Arabic",
       "arabic": "العربية",
-      "teacher": "Br. Ijaz",
+      "teacher": "Sr. Fadiah",
       "points": [
         "The Arabic alphabet",
-        "Basic reading and writing",
+        "Reading and writing",
         "Learning paths for each student",
         "Interactive practice"
       ]
-    },
-    {
-      "title": "Public Speaking",
-      "arabic": "الخطابة",
-      "teacher": "Sr. Tahseen",
-      "points": [
-        "Confidence and communication",
-        "Persuasive speaking",
-        "Critical thinking and respectful debate",
-        "Leadership and problem solving"
-      ]
     }
   ],
-  "times": ["10:00 – 10:40 AM", "10:40 – 11:20 AM", "11:20 – 11:35 AM", "11:35 AM – 12:15 PM", "12:15 – 12:55 PM"],
+  "times": [
+    "10:00 – 10:45 AM",
+    "10:45 – 11:30 AM",
+    "11:30 – 11:50 AM",
+    "11:50 AM – 12:35 PM",
+    "12:35 – 12:40 PM",
+    "12:40 – 1:00 PM"
+  ],
   "groups": [
-    { "id": "6-8", "label": "Ages 6–8", "slots": ["Arabic", "Quran", "Break", "Seerah", "Islamic Studies"] },
-    { "id": "9-11", "label": "Ages 9–11", "slots": ["Public Speaking", "Islamic Studies", "Break", "Quran", "Seerah"] },
     {
-      "id": "12-15",
-      "label": "Ages 12–15",
-      "slots": ["Public Speaking", "Seerah", "Break", "Islamic Studies", "Quran"]
+      "id": "group-1",
+      "label": "Group 1",
+      "slots": [
+        { "name": "Islamic Studies", "teacher": "Sr. Sarah" },
+        { "name": "Arabic", "teacher": "Sr. Fadiah" },
+        { "name": "Snack Break", "break": true },
+        { "name": "Qur'an Studies", "teacher": "Sr. Sumiah" },
+        { "name": "Wudu / Cleanup", "break": true },
+        { "name": "Salah" }
+      ]
+    },
+    {
+      "id": "group-2",
+      "label": "Group 2",
+      "slots": [
+        { "name": "Qur'an Studies", "teacher": "Sr. Sumiah" },
+        { "name": "Islamic Studies", "teacher": "Br. Ubido" },
+        { "name": "Snack Break", "break": true },
+        { "name": "Arabic", "teacher": "Sr. Fadiah" },
+        { "name": "Wudu / Cleanup", "break": true },
+        { "name": "Salah" }
+      ]
+    },
+    {
+      "id": "group-3",
+      "label": "Group 3",
+      "slots": [
+        { "name": "Arabic", "teacher": "Sr. Fadiah" },
+        { "name": "Qur'an Studies", "teacher": "Sr. Sumiah" },
+        { "name": "Snack Break", "break": true },
+        { "name": "Islamic Studies", "teacher": "Br. Ubido" },
+        { "name": "Wudu / Cleanup", "break": true },
+        { "name": "Salah" }
+      ]
     }
   ]
 }

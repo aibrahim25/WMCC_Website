@@ -189,6 +189,11 @@
   font-family: var(--display);
   font-size: 24px;
 }
+.slotTeacher {
+  margin-left: auto;
+  font-size: 15px;
+  color: var(--on-dark-2);
+}
 .slotBreak {
   background: transparent;
   border-style: dashed;

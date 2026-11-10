@@ -10,7 +10,7 @@ import { isEmail } from '../lib/format'
 import { MAPS_URL, site } from '../lib/site'
 import s from './Contact.module.css'
 
-const TOPICS = ['General', 'Sunday School', 'Nikah', 'New to Islam', 'Volunteer', 'Donations']
+const TOPICS = ['General', 'Sunday School', 'Youth Program', 'New to Islam', 'Volunteer', 'Donations']
 const COPIED_MS = 1800
 
 const EMPTY_FORM = { topic: TOPICS[0], name: '', email: '', phone: '', message: '' }
@@ -161,7 +161,7 @@ export default function Contact() {
       <PageHero
         arabic="السَّلَامُ عَلَيْكُمْ"
         title="Contact Us"
-        lead="Questions, a visit, a nikah or something urgent. We're here to help."
+        lead="Questions, a visit or something urgent. We're here to help."
       />
 
       <section className="container">
@@ -228,7 +228,7 @@ export default function Contact() {
           </Reveal>
           <div className={s.side}>
             <Reveal delay={0.05} className={s.urgent}>
-              <span className={s.urgentKicker}>Janazah or urgent</span>
+              <span className={s.urgentKicker}>Something urgent?</span>
               <p className={s.urgentText}>Please call us directly instead of using the form.</p>
               <a href={`tel:${site.phoneHref}`} className="btn btn-gold">
                 <Icon name="phone" size={18} /> {site.phone}

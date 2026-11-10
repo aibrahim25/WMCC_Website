@@ -1,7 +1,7 @@
 # WMCC Website
 
 Source code for [wmccmosque.org](https://wmccmosque.org), the website of the Windham Muslim Community Center in
-Windham, NH.
+Londonderry, NH.
 
 It's a static single-page app: daily prayer times calculated in the browser, an events calendar, Sunday School info
 and registration, a contact form and a donation page. Day-to-day content lives in JSON files so it can be changed
@@ -81,12 +81,12 @@ src/
 
 Everything the board changes often is in `src/content/`. After editing, rebuild and redeploy.
 
-| File          | Contents                                                                                        |
-| ------------- | ----------------------------------------------------------------------------------------------- |
-| `site.json`   | Name, phone, email, address, social links, prayer settings, homepage announcement, integrations |
-| `events.json` | Events and classes                                                                              |
-| `school.json` | Sunday School facts, courses, teachers and the weekly schedule                                  |
-| `donate.json` | Donation funds and preset amounts. The first three funds also appear on the home page.          |
+| File          | Contents                                                                                                                                                                           |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `site.json`   | Name, phone, email, address, social links, prayer settings, homepage announcement, integrations                                                                                    |
+| `events.json` | Events and classes                                                                                                                                                                 |
+| `school.json` | Sunday School facts, courses and the weekly schedule. Each group has one slot per entry in `times`: `{ "name": "Arabic", "teacher": "Sr. Fadiah" }`, or `"break": true` for breaks |
+| `donate.json` | Donation funds and preset amounts. The first three funds also appear on the home page.                                                                                             |
 
 ### Events (`events.json`)
 
@@ -99,10 +99,11 @@ Everything the board changes often is in `src/content/`. After editing, rebuild 
 | `recurrence`   | yes      | See below                                                                                 |
 | `start`, `end` | no       | 24-hour `"HH:MM"`. Adding `start` shows the time and an **Add to Google Calendar** button |
 | `audience`     | no       | e.g. "For sisters"                                                                        |
-| `location`     | no       | Defaults to "WMCC, Windham NH"                                                            |
+| `location`     | no       | Defaults to "WMCC, Londonderry NH"                                                        |
 | `description`  | no       | Shown in the event dialog                                                                 |
 | `tags`         | no       | Array of short labels                                                                     |
 | `link`         | no       | A page on this site to link from the dialog, e.g. `"/school"`                             |
+| `instagram`    | no       | Instagram page for this program. Adds a **Follow on Instagram** button.                   |
 | `featured`     | no       | `true` shows the event in the large card at the top of the Events page                    |
 | `highlight`    | no       | `{ "value": "14–25", "label": "years old" }`: the big figure on the featured card         |
 

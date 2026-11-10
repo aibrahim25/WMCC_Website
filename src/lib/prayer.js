@@ -21,7 +21,7 @@ export const PRAYER_ORDER = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 export const jumuah = settings.jumuah
 
 /**
- * Astronomical prayer times for one calendar day in Windham, using the same formulas as praytimes.org.
+ * Astronomical prayer times for one calendar day at the masjid, using the same formulas as praytimes.org.
  * Angles and the Asr factor come from `site.json → prayer`.
  *
  * @param {number} y Year
@@ -100,7 +100,7 @@ export function iqamaFor(key, athanMs) {
 // Calendar dates in the masjid's time zone, as plain { y, m, d } objects (m is 1–12).
 // ---------------------------------------------------------------------------
 
-/** The calendar date in Windham at the given instant. */
+/** The calendar date at the masjid at the given instant. */
 export function partsInTz(ms) {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: TZ,
@@ -127,11 +127,11 @@ export function addMonths({ y, m }, n) {
 // Formatting
 // ---------------------------------------------------------------------------
 
-/** "5:42 AM" in Windham time. */
+/** "5:42 AM" in the masjid's time zone. */
 export const fmtTime = (ms) =>
   new Date(ms).toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' })
 
-/** "Tuesday, November 10" in Windham time. */
+/** "Tuesday, November 10" in the masjid's time zone. */
 export const fmtLongDate = (ms) =>
   new Date(ms).toLocaleDateString('en-US', { timeZone: TZ, weekday: 'long', month: 'long', day: 'numeric' })
 

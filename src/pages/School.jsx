@@ -26,7 +26,7 @@ const FEATURES = [
   {
     icon: 'book',
     title: 'A full curriculum',
-    body: 'Structured classes covering Quran, Islamic Studies, Seerah, Arabic and public speaking.',
+    body: "Structured classes covering Qur'an Studies, Islamic Studies and Arabic, ending with salah together.",
   },
   {
     icon: 'users',
@@ -54,7 +54,7 @@ function Schedule() {
           <Segmented
             id="group"
             tone="dark"
-            label="Age group"
+            label="Group"
             value={group}
             onChange={setGroup}
             options={school.groups.map(({ id, label }) => ({ id, label }))}
@@ -73,12 +73,13 @@ function Schedule() {
               {g.slots.map((slot, i) => (
                 <motion.li
                   key={school.times[i]}
-                  className={`${s.slot} ${slot === 'Break' ? s.slotBreak : ''}`}
+                  className={`${s.slot} ${slot.break ? s.slotBreak : ''}`}
                   variants={{ hidden: { opacity: 0, x: -14 }, show: { opacity: 1, x: 0 } }}
                   transition={{ duration: 0.3 }}
                 >
                   <span className={`${s.slotTime} tabular`}>{school.times[i]}</span>
-                  <span className={s.slotName}>{slot}</span>
+                  <span className={s.slotName}>{slot.name}</span>
+                  {slot.teacher && <span className={s.slotTeacher}>{slot.teacher}</span>}
                 </motion.li>
               ))}
             </motion.ol>
@@ -89,11 +90,12 @@ function Schedule() {
   )
 }
 
-const EMPTY_REGISTRATION = { child: '', group: school.groups[0].label, parent: '', phone: '', email: '', notes: '' }
+const EMPTY_REGISTRATION = { child: '', age: '', parent: '', phone: '', email: '', notes: '' }
 
 function validateRegistration(v) {
   const errors = {}
   if (!v.child.trim()) errors.child = "Enter your child's name"
+  if (!v.age.trim()) errors.age = "Enter your child's age"
   if (!v.parent.trim()) errors.parent = 'Enter a parent or guardian name'
   if (!isEmail(v.email)) errors.email = 'Enter an email like name@example.com'
   return errors
@@ -155,13 +157,17 @@ function Registration() {
                   />
                   {errors.child && <span className="field-error">{errors.child}</span>}
                 </label>
-                <label className="field" htmlFor="reg-group">
-                  Age group
-                  <select id="reg-group" className="input" value={form.group} onChange={set('group')}>
-                    {school.groups.map((g) => (
-                      <option key={g.id}>{g.label}</option>
-                    ))}
-                  </select>
+                <label className="field" htmlFor="reg-age">
+                  Child's age
+                  <input
+                    id="reg-age"
+                    className="input"
+                    inputMode="numeric"
+                    value={form.age}
+                    onChange={set('age')}
+                    aria-invalid={!!errors.age}
+                  />
+                  {errors.age && <span className="field-error">{errors.age}</span>}
                 </label>
                 <label className="field" htmlFor="reg-parent">
                   Parent or guardian

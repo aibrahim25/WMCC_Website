@@ -6,7 +6,7 @@ export const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'A
 export const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const RRULE_DAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
 
-const DEFAULT_LOCATION = 'WMCC, Windham NH'
+const DEFAULT_LOCATION = 'WMCC, Londonderry NH'
 const DEFAULT_CATEGORY = 'community'
 
 /** Filter options for the Events page. Every id except "all" is a valid event `category`. */
@@ -25,7 +25,7 @@ export const categoryLabel = (id) => CATEGORY_LABELS[id] || CATEGORY_LABELS[DEFA
 export const eventLocation = (ev) => ev.location || DEFAULT_LOCATION
 
 // ---------------------------------------------------------------------------
-// Dates. Calendar dates are plain { y, m, d } objects (m is 1–12) in Windham time.
+// Dates. Calendar dates are plain { y, m, d } objects (m is 1–12) in the masjid's time zone.
 // ---------------------------------------------------------------------------
 
 const daysInMonth = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate()
@@ -221,5 +221,6 @@ export function eventFromRow(row) {
     tags: row.tags ? row.tags.split('|').map((t) => t.trim()) : [],
     featured: /^(yes|true|1)$/i.test(row.featured || ''),
     link: row.link || undefined,
+    instagram: row.instagram || undefined,
   }
 }

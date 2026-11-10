@@ -6,7 +6,7 @@ const HOUR = 3600000
 const MINUTE = 60000
 
 /**
- * Today's prayer times in Windham with a live countdown to the next prayer. Re-renders every second.
+ * Today's prayer times at the masjid with a live countdown to the next prayer. Re-renders every second.
  *
  * After Isha, "next" is tomorrow's Fajr.
  */

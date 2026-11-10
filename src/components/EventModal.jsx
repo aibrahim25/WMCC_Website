@@ -126,6 +126,11 @@ export default function EventModal({ ev, onClose }) {
             )}
 
             <div className={s.actions}>
+              {ev.instagram && (
+                <a href={ev.instagram} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                  <Icon name="instagram" size={18} /> Follow on Instagram
+                </a>
+              )}
               {cal && (
                 <a href={cal} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                   <Icon name="calendar" size={18} /> Add to Google Calendar
