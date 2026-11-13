@@ -43,9 +43,9 @@ const QUICK_LINKS = [
   {
     to: '/school',
     icon: 'book',
-    title: 'Enroll your child',
+    title: school.registrationOpen ? 'Enroll your child' : 'Sunday School',
     body: 'Sunday School for ages 6 to 15, every Sunday morning.',
-    cta: 'Register',
+    cta: school.registrationOpen ? 'Register' : 'Learn more',
     gradient: 'linear-gradient(135deg, #8E83BF, #E9A58E)',
   },
   {
@@ -178,9 +178,11 @@ export default function Home() {
               Every Sunday, 10:00 AM to 1:00 PM. Three groups taught by volunteer teachers from our own community.
             </p>
             <div className={s.schoolCtas}>
-              <Link to="/school" className="btn btn-gold">
-                Register online
-              </Link>
+              {school.registrationOpen && (
+                <Link to="/school" className="btn btn-gold">
+                  Register online
+                </Link>
+              )}
               <Link to="/school" className="btn btn-ghost-light">
                 See all courses
               </Link>

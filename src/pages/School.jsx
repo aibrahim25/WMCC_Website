@@ -117,7 +117,11 @@ function Registration() {
         <Reveal className={s.regIntro}>
           <span className="eyebrow">Registration</span>
           <h2 className="h2">Enroll your child</h2>
-          <p className="lead">Fill out the form and the school team will follow up by email with next steps.</p>
+          <p className="lead">
+            {school.registrationOpen
+              ? 'Fill out the form and the school team will follow up by email with next steps.'
+              : 'Registration is closed for this school year.'}
+          </p>
           <div className={s.regHelp}>
             <strong>Questions?</strong>
             <a href={`tel:${site.phoneHref}`}>
@@ -132,7 +136,18 @@ function Registration() {
           </div>
         </Reveal>
         <Reveal delay={0.08} className={s.regCard}>
-          {status === 'sent' ? (
+          {!school.registrationOpen ? (
+            <div className={s.form}>
+              <h3>Registration is closed</h3>
+              <p>
+                Registration for this school year has closed. Contact us to ask about the waiting list or next year's
+                registration.
+              </p>
+              <Link to="/contact" className="btn btn-primary">
+                Contact us
+              </Link>
+            </div>
+          ) : status === 'sent' ? (
             <FormSuccess
               title="JazakAllahu khair!"
               body="We got your registration. The school team will email you soon with next steps."
@@ -235,7 +250,7 @@ export default function School() {
         lead="Strong foundations in Quran, faith and character for kids ages 6 to 15."
       >
         <a href="#register" className="btn btn-light">
-          Register your child
+          {school.registrationOpen ? 'Register your child' : 'Registration info'}
         </a>
         <a href="#schedule" className="btn btn-ghost-light">
           View class schedule

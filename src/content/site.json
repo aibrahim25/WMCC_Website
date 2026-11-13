@@ -21,7 +21,7 @@
     "jumuah": { "khutbah": "1:00 PM", "iqama": "1:30 PM" }
   },
   "announcement": {
-    "enabled": true,
+    "enabled": false,
     "label": "Now enrolling",
     "text": "Sunday School meets every Sunday, 10 AM to 1 PM",
     "link": "/school"
