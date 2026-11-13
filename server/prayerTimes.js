@@ -2,6 +2,9 @@ import { fetchMasjidal, normalize } from './masjidal.js'
 
 const CACHE_MS = 15 * 60 * 1000
 const MAX_RANGE_DAYS = 62
+// Only serve dates near today, so the cache and Masjidal can't be flooded with arbitrary dates.
+const MAX_DAYS_FROM_TODAY = 400
+const MAX_CACHE_ENTRIES = 100
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 
 const cache = new Map()
@@ -25,6 +28,10 @@ export async function getPrayerTimes(query, env = process.env) {
   if (!(range >= 0 && range <= MAX_RANGE_DAYS)) {
     return { status: 400, body: { error: `The date range must be 0–${MAX_RANGE_DAYS} days` } }
   }
+  const today = new Date().toISOString().slice(0, 10)
+  if (Math.abs(daysBetween(today, from)) > MAX_DAYS_FROM_TODAY) {
+    return { status: 400, body: { error: `Dates must be within ${MAX_DAYS_FROM_TODAY} days of today` } }
+  }
   if (!env.MASJID_ID) {
     return { status: 503, body: { error: 'MASJID_ID is not configured on the server' } }
   }
@@ -35,6 +42,8 @@ export async function getPrayerTimes(query, env = process.env) {
 
   try {
     const body = { source: 'masjidal', days: normalize(await fetchMasjidal(from, to, env), from) }
+    // Evict the oldest entry once the cache is full (Maps keep insertion order).
+    if (cache.size >= MAX_CACHE_ENTRIES) cache.delete(cache.keys().next().value)
     cache.set(key, { at: Date.now(), body })
     return { status: 200, body }
   } catch (err) {

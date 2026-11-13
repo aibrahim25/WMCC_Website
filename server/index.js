@@ -23,6 +23,17 @@ const port = Number(process.env.PORT) || 3000
 const app = express()
 app.disable('x-powered-by')
 
+// Basic security headers for every response.
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Strict-Transport-Security': 'max-age=31536000',
+  })
+  next()
+})
+
 app.get('/api/prayer-times', async (req, res) => {
   const { status, body } = await getPrayerTimes(req.query)
   if (status === 200) res.set('Cache-Control', 'public, max-age=900')

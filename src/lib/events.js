@@ -24,6 +24,15 @@ export const categoryLabel = (id) => CATEGORY_LABELS[id] || CATEGORY_LABELS[DEFA
 
 export const eventLocation = (ev) => ev.location || DEFAULT_LOCATION
 
+/**
+ * The event's `link` if it is a page on this site ("/school"), otherwise null. Rejects external and protocol-relative
+ * URLs ("//evil.com", "/\\evil.com") so content from the Google Sheet can't redirect visitors off-site.
+ */
+/** `url` if it is an https:// address, otherwise null. Blocks javascript: and other unsafe links from the sheet. */
+export const safeExternalUrl = (url) => (/^https:\/\//i.test(url || '') ? url : null)
+
+export const internalLink = (ev) => (/^\/(?![/\\])/.test(ev.link || '') ? ev.link : null)
+
 // ---------------------------------------------------------------------------
 // Dates. Calendar dates are plain { y, m, d } objects (m is 1–12) in the masjid's time zone.
 // ---------------------------------------------------------------------------

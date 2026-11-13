@@ -1,7 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { categoryLabel, dateLabel, eventLocation, gcalLink, timeRange } from '../lib/events'
+import {
+  categoryLabel,
+  dateLabel,
+  eventLocation,
+  gcalLink,
+  internalLink,
+  safeExternalUrl,
+  timeRange,
+} from '../lib/events'
 import { DateBadge } from './EventCard'
 import Icon from './Icon'
 import s from './EventModal.module.css'
@@ -50,6 +58,8 @@ export default function EventModal({ ev, onClose }) {
 
   const cal = ev ? gcalLink(ev) : null
   const time = ev ? timeRange(ev) : ''
+  const link = ev ? internalLink(ev) : null
+  const instagram = ev ? safeExternalUrl(ev.instagram) : null
 
   return (
     <AnimatePresence>
@@ -126,8 +136,8 @@ export default function EventModal({ ev, onClose }) {
             )}
 
             <div className={s.actions}>
-              {ev.instagram && (
-                <a href={ev.instagram} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              {instagram && (
+                <a href={instagram} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                   <Icon name="instagram" size={18} /> Follow on Instagram
                 </a>
               )}
@@ -136,8 +146,8 @@ export default function EventModal({ ev, onClose }) {
                   <Icon name="calendar" size={18} /> Add to Google Calendar
                 </a>
               )}
-              {ev.link ? (
-                <Link to={ev.link} className="btn btn-outline" onClick={onClose}>
+              {link ? (
+                <Link to={link} className="btn btn-outline" onClick={onClose}>
                   Learn more
                 </Link>
               ) : (

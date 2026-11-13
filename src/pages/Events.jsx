@@ -8,7 +8,7 @@ import EventCard from '../components/EventCard'
 import EventModal from '../components/EventModal'
 import Icon from '../components/Icon'
 import { useEvents } from '../hooks/useEvents'
-import { CATEGORIES, categoryLabel, eventLocation } from '../lib/events'
+import { CATEGORIES, categoryLabel, eventLocation, safeExternalUrl } from '../lib/events'
 import { site } from '../lib/site'
 import s from './Events.module.css'
 
@@ -63,7 +63,7 @@ export default function Events() {
               </div>
               <div className={s.fCtas}>
                 <a
-                  href={featured.instagram || site.social.instagram}
+                  href={safeExternalUrl(featured.instagram) || site.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"
