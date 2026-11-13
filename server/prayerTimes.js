@@ -1,4 +1,4 @@
-import { fetchMasjidal, normalize } from './masjidal.js'
+import { fetchMasjidal, masjidalKey, normalize } from './masjidal.js'
 
 const CACHE_MS = 15 * 60 * 1000
 const MAX_RANGE_DAYS = 62
@@ -32,8 +32,8 @@ export async function getPrayerTimes(query, env = process.env) {
   if (Math.abs(daysBetween(today, from)) > MAX_DAYS_FROM_TODAY) {
     return { status: 400, body: { error: `Dates must be within ${MAX_DAYS_FROM_TODAY} days of today` } }
   }
-  if (!env.MASJID_ID) {
-    return { status: 503, body: { error: 'MASJID_ID is not configured on the server' } }
+  if (!masjidalKey(env)) {
+    return { status: 503, body: { error: 'MASJIDAL_API_KEY is not configured on the server' } }
   }
 
   const key = `${from}_${to}`
