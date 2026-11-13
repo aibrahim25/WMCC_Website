@@ -3,9 +3,6 @@
  *
  * Request: GET https://api.masjidal.com/timings?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD with the masjid's server key
  * in the `x-api-key` header. The key identifies the masjid, so no masjid ID is needed.
- *
- * `normalize()` accepts the common layouts for prayer-time data. If Masjidal's response doesn't match, this is the
- * only file that needs updating. Run `npm run check:masjidal` to see the raw response.
  */
 
 const DEFAULT_URL = 'https://api.masjidal.com/timings?start_date={from}&end_date={to}'
@@ -24,7 +21,6 @@ const FIELD_NAMES = {
 const ATHAN_NAMES = ['athan', 'adhan', 'azan', 'salah', 'start', 'begins', 'time']
 const IQAMA_NAMES = ['iqama', 'iqamah', 'jamaat', 'jamah', 'congregation']
 
-/** The server key, from MASJIDAL_API_KEY (or MASJIDAL_SERVER_KEY, the name Masjidal's examples use). */
 export const masjidalKey = (env = process.env) => env.MASJIDAL_API_KEY || env.MASJIDAL_SERVER_KEY || ''
 
 /** Builds the Masjidal request URL for a date range (YYYY-MM-DD). */
@@ -42,10 +38,6 @@ export async function fetchMasjidal(from, to, env = process.env) {
   return res.json()
 }
 
-/**
- * "5:10AM", "5:10 pm", "05:10", "17:10", "05:10:00" or "2026-11-11T05:10:00-05:00" → "05:10" / "17:10".
- * Returns null if unrecognised. ISO date-times are read as the masjid's local wall-clock time.
- */
 export function parseTime(value) {
   const text = String(value ?? '').trim()
   const iso = /T(\d{2}):(\d{2})/.exec(text)
@@ -64,13 +56,7 @@ const isObject = (v) => v && typeof v === 'object' && !Array.isArray(v)
 const lowerKeys = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k.toLowerCase(), v]))
 const firstOf = (obj, names) => names.map((n) => obj[n]).find((v) => v != null)
 
-/**
- * Reads athan and iqama times from one day's data. Handles:
- * - `{ fajr: "5:10 AM", ... }` (athan only)
- * - `{ athan: { fajr: ... }, iqama: { fajr: ... } }`
- * - `{ fajr: { athan: "5:10 AM", iqama: "5:40 AM" }, ... }`
- * - `{ fajr: "5:10 AM", fajr_iqama: "5:40 AM", ... }`
- */
+
 function readDay(entry) {
   const day = lowerKeys(entry)
   const athanGroup = firstOf(day, ATHAN_NAMES.concat('prayers', 'timings'))
@@ -128,10 +114,6 @@ function findDays(raw) {
   return []
 }
 
-/**
- * Converts a Masjidal response to `{ "YYYY-MM-DD": { athan: { fajr: "05:10", ... }, iqama: { ... } } }`.
- * Uses each entry's own date when it has one, otherwise counts days from `from`. Throws if no times are found.
- */
 export function normalize(raw, from) {
   const days = {}
   findDays(raw).forEach(([date, entry], i) => {

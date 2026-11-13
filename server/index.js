@@ -1,10 +1,3 @@
-/**
- * Production server: serves the built site from dist/ and the /api endpoints.
- *
- *   npm run build && npm start
- *
- * Settings come from environment variables (see README). A local .env file is loaded if present.
- */
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
