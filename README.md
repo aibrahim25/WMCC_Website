@@ -97,7 +97,7 @@ Everything the board changes often is in `src/content/`. After editing, rebuild 
 | `site.json`   | Name, phone, email, address, social links, prayer settings, homepage announcement, integrations                                                                                    |
 | `events.json` | Events and classes                                                                                                                                                                 |
 | `school.json` | Sunday School facts, courses and the weekly schedule. Each group has one slot per entry in `times`: `{ "name": "Arabic", "teacher": "Sr. Fadiah" }`, or `"break": true` for breaks |
-| `donate.json` | Donation funds and preset amounts. The first three funds also appear on the home page.                                                                                             |
+| `donate.json` | Donation funds shown on the Donate page (`icon` is an icon name). The first three also appear on the home page.                                                                    |
 
 ### Events (`events.json`)
 
@@ -160,17 +160,17 @@ Masjidal's API is not publicly documented. If `npm run check:masjidal` shows a d
 
 These settings are in `site.json → integrations`. Each one is optional, and the site works without it.
 
-| Setting                 | Purpose                                                                                                                      |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `formspreeId`           | Contact form. Create a form at formspree.io and paste the ID (the part after `/f/`).                                         |
-| `schoolFormspreeId`     | Sunday School registration. Falls back to `formspreeId`.                                                                     |
-| `newsletterFormspreeId` | Footer newsletter sign-up                                                                                                    |
-| `donateUrl`             | Payment page (Stripe Payment Link, PayPal, LaunchGood, ...). `fund`, `amount` and `frequency` are added as query parameters. |
-| `eventsSheetCsv`        | Published Google Sheet CSV for events (see above)                                                                            |
-| `prayerTimesApi`        | Path of the prayer-times API. Leave as `/api/prayer-times`; set to `""` to always use calculated times.                      |
+| Setting                 | Purpose                                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| `formspreeId`           | Contact form. Create a form at formspree.io and paste the ID (the part after `/f/`).                    |
+| `schoolFormspreeId`     | Sunday School registration. Falls back to `formspreeId`.                                                |
+| `newsletterFormspreeId` | Footer newsletter sign-up                                                                               |
+| `donateUrl`             | The masjid's Masjidal donation page (must start with `https://`). The **Donate now** button opens it.   |
+| `eventsSheetCsv`        | Published Google Sheet CSV for events (see above)                                                       |
+| `prayerTimesApi`        | Path of the prayer-times API. Leave as `/api/prayer-times`; set to `""` to always use calculated times. |
 
 Without a Formspree ID, a form runs in demo mode: it shows the success message but sends nothing. Without a
-`donateUrl`, the Donate page says online checkout is opening soon.
+`donateUrl`, the Donate page says online giving is opening soon.
 
 ## Deployment (Hostinger Node.js app)
 

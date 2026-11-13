@@ -1,10 +1,24 @@
 {
   "funds": [
-    { "id": "Sadaqah", "body": "General support for the masjid: utilities, upkeep and daily operations." },
-    { "id": "Zakat", "body": "Your obligatory zakat, distributed to those eligible in our community." },
-    { "id": "Youth fund", "body": "Youth nights, outings and supplies for ages 14 to 25." },
-    { "id": "Sunday School", "body": "Books, classroom supplies and teacher support." }
-  ],
-  "amounts": [25, 50, 100, 250, 500],
-  "defaultAmount": 50
+    {
+      "id": "Sadaqah",
+      "icon": "heart",
+      "body": "General support for the masjid: utilities, upkeep and daily operations."
+    },
+    {
+      "id": "Zakat",
+      "icon": "hands",
+      "body": "Your obligatory zakat, distributed to those eligible in our community."
+    },
+    {
+      "id": "Youth fund",
+      "icon": "users",
+      "body": "Youth nights, outings and supplies for ages 14 to 25."
+    },
+    {
+      "id": "Sunday School",
+      "icon": "book",
+      "body": "Books, classroom supplies and teacher support."
+    }
+  ]
 }

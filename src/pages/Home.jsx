@@ -28,7 +28,7 @@ const QUICK_LINKS = [
     to: '/donate',
     icon: 'heart',
     title: 'Give online',
-    body: 'Sadaqah, zakat or the youth fund in under a minute.',
+    body: 'Sadaqah, zakat or the youth fund, securely online.',
     cta: 'Donate',
     gradient: 'linear-gradient(135deg, #2D4687, #5B70B4)',
   },
@@ -246,7 +246,7 @@ export default function Home() {
           </div>
           <div className={s.giveActions}>
             {HOME_FUNDS.map((f) => (
-              <Link key={f} to="/donate" state={{ fund: f }} className={s.giveFund}>
+              <Link key={f} to="/donate" className={s.giveFund}>
                 <span>{f}</span>
                 <Icon name="arrow" size={18} />
               </Link>
