@@ -27,6 +27,7 @@
     "link": "/school"
   },
   "integrations": {
+    "prayerTimesApi": "/api/prayer-times",
     "formspreeId": "",
     "schoolFormspreeId": "",
     "newsletterFormspreeId": "",

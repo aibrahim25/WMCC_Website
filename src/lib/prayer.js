@@ -117,6 +117,34 @@ export function addDays({ y, m, d }, n) {
   return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() }
 }
 
+/** { y: 2026, m: 11, d: 3 } → "2026-11-03" */
+export const isoDate = ({ y, m, d }) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+
+/** Offset of the masjid's time zone from UTC at an instant, in ms (e.g. -5h in winter). */
+function tzOffsetMs(ms) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: TZ,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }).formatToParts(ms)
+  const get = (type) => Number(parts.find((p) => p.type === type).value)
+  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'), get('second'))
+  return asUtc - Math.floor(ms / 1000) * 1000
+}
+
+/** Converts a wall-clock "HH:MM" on a date in the masjid's time zone to epoch ms (handles daylight saving). */
+export function zonedTimeToMs({ y, m, d }, hhmm) {
+  const [h, min] = hhmm.split(':').map(Number)
+  const wall = Date.UTC(y, m - 1, d, h, min)
+  const guess = wall - tzOffsetMs(wall)
+  return wall - tzOffsetMs(guess)
+}
+
 /** Shifts a { y, m } month by `n` months. */
 export function addMonths({ y, m }, n) {
   const index = y * 12 + (m - 1) + n

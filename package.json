@@ -5,20 +5,21 @@
   "description": "Website for the Windham Muslim Community Center (wmccmosque.org)",
   "type": "module",
   "engines": {
-    "node": ">=18.18"
+    "node": ">=20.12"
   },
   "scripts": {
     "dev": "vite",
-    "start": "vite",
     "build": "vite build",
+    "start": "node server/index.js",
     "build:preview": "vite build --mode preview",
-    "preview": "vite preview",
+    "check:masjidal": "node server/check-masjidal.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run format:check && npm run build"
   },
   "dependencies": {
+    "express": "4.21.1",
     "framer-motion": "11.11.17",
     "react": "18.3.1",
     "react-dom": "18.3.1",

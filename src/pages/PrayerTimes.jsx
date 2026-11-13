@@ -5,7 +5,8 @@ import Reveal from '../components/Reveal'
 import Segmented from '../components/Segmented'
 import Icon from '../components/Icon'
 import { usePrayerTimes } from '../hooks/usePrayerTimes'
-import { addMonths, calcDay, fmtTime, jumuah, partsInTz, PRAYERS } from '../lib/prayer'
+import { addMonths, fmtTime, isoDate, jumuah, partsInTz, PRAYERS } from '../lib/prayer'
+import { getDayTimes, usePrayerSchedule } from '../lib/prayerSchedule'
 import { pad2 } from '../lib/format'
 import { site } from '../lib/site'
 import s from './PrayerTimes.module.css'
@@ -105,16 +106,17 @@ function Timetable() {
   const [today] = useState(() => partsInTz(Date.now()))
   const [offset, setOffset] = useState(0)
   const { y: vy, m: vm } = addMonths(today, offset)
+  const daysInMonth = new Date(Date.UTC(vy, vm, 0)).getUTCDate()
+  const live = usePrayerSchedule({ y: vy, m: vm, d: 1 }, { y: vy, m: vm, d: daysInMonth })
 
   const rows = useMemo(() => {
-    const days = new Date(Date.UTC(vy, vm, 0)).getUTCDate()
-    return Array.from({ length: days }, (_, i) => {
+    return Array.from({ length: daysInMonth }, (_, i) => {
       const d = i + 1
-      const t = calcDay(vy, vm, d)
+      const t = getDayTimes({ y: vy, m: vm, d }, live).athan
       const wd = new Date(Date.UTC(vy, vm - 1, d)).getUTCDay()
       return { d, wd, t, isToday: vy === today.y && vm === today.m && d === today.d }
     })
-  }, [vy, vm, today.y, today.m, today.d])
+  }, [vy, vm, daysInMonth, live, today.y, today.m, today.d])
 
   const monthLabel = new Date(Date.UTC(vy, vm - 1, 15)).toLocaleDateString('en-US', {
     timeZone: 'UTC',
@@ -197,6 +199,8 @@ function Timetable() {
 
 export default function PrayerTimes() {
   const off = site.prayer.iqamaOffsets
+  const [today] = useState(() => partsInTz(Date.now()))
+  const isLive = Boolean(usePrayerSchedule(today, today)[isoDate(today)])
   return (
     <>
       <PageHero
@@ -242,22 +246,32 @@ export default function PrayerTimes() {
             <span className={s.infoIcon}>
               <Icon name="moon" />
             </span>
-            <h3>Calculation method</h3>
-            <p>
-              Islamic Society of North America (ISNA), with Fajr and Isha at {site.prayer.fajrAngle}°. Calculated for
-              {site.address.city}, {site.address.state} at {site.location.lat.toFixed(2)}°N,{' '}
-              {Math.abs(site.location.lng).toFixed(2)}°W.
-            </p>
+            <h3>{isLive ? 'Set by the masjid' : 'Calculation method'}</h3>
+            {isLive ? (
+              <p>Athan and iqama times come straight from the masjid&apos;s official schedule.</p>
+            ) : (
+              <p>
+                {`Islamic Society of North America (ISNA), with Fajr and Isha at ${site.prayer.fajrAngle}°. `}
+                {`Calculated for ${site.address.city}, ${site.address.state} at ${site.location.lat.toFixed(2)}°N, `}
+                {`${Math.abs(site.location.lng).toFixed(2)}°W.`}
+              </p>
+            )}
           </Reveal>
           <Reveal delay={0.06} className={s.infoCard}>
             <span className={s.infoIcon}>
               <Icon name="clock" />
             </span>
-            <h3>Iqama policy</h3>
-            <p>
-              Iqama is {off.fajr} minutes after athan for Fajr, Dhuhr, Asr and Isha. Maghrib iqama is {off.maghrib}{' '}
-              minutes after athan. Jumu'ah iqama is {jumuah.iqama}.
-            </p>
+            <h3>Iqama times</h3>
+            {isLive ? (
+              <p>
+                Iqama times are set by the masjid and can change through the year. Jumu&apos;ah iqama is {jumuah.iqama}.
+              </p>
+            ) : (
+              <p>
+                {`Iqama is ${off.fajr} minutes after athan for Fajr, Dhuhr, Asr and Isha. `}
+                {`Maghrib iqama is ${off.maghrib} minutes after athan. Jumu'ah iqama is ${jumuah.iqama}.`}
+              </p>
+            )}
           </Reveal>
           <Reveal delay={0.12} className={s.infoCard}>
             <span className={s.infoIcon}>
@@ -265,8 +279,8 @@ export default function PrayerTimes() {
             </span>
             <h3>Always up to date</h3>
             <p>
-              Times are calculated right here on the page every day, including daylight saving changes, so they never
-              get stuck loading.
+              Times update automatically every day, including daylight saving changes. If the live schedule can&apos;t
+              be reached, the page calculates the times itself so they never get stuck loading.
             </p>
           </Reveal>
         </div>

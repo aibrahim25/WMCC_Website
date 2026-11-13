@@ -31,4 +31,8 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    files: ['server/**/*.js', 'vite.config.js', 'eslint.config.js'],
+    languageOptions: { globals: globals.node },
+  },
 ]
