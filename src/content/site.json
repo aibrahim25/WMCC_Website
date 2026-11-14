@@ -4,7 +4,7 @@
   "address": { "street": "40 Mammoth Rd", "city": "Londonderry", "state": "NH", "zip": "03053" },
   "phone": "(603) 874-1362",
   "phoneHref": "+16038741362",
-  "email": "contact@wmcc.org",
+  "email": "mailaja.mohammed@wmccmosque.org",
   "ein": "83-2954400",
   "social": {
     "facebook": "https://www.facebook.com/WMCCNH",
@@ -28,8 +28,8 @@
   },
   "integrations": {
     "prayerTimesApi": "/api/prayer-times",
-    "formspreeId": "",
-    "schoolFormspreeId": "",
+     "formspreeId": "xppdqnqq",
+    "schoolFormspreeId": "xppdqnqq",
     "newsletterFormspreeId": "",
     "donateUrl": "https://donation.masjidal.com/wmcc/campaign/",
     "eventsSheetCsv": ""

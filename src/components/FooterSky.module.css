@@ -1,0 +1,169 @@
+.sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Milky Way: a soft, tilted band of coloured light */
+.galaxy {
+  position: absolute;
+  left: -20%;
+  top: 30%;
+  width: 140%;
+  height: 160px;
+  transform: rotate(-10deg);
+  background: radial-gradient(ellipse 30% 60% at 20% 50%, rgba(142, 131, 191, 0.35), transparent 70%),
+    radial-gradient(ellipse 25% 50% at 45% 45%, rgba(91, 112, 180, 0.35), transparent 70%),
+    radial-gradient(ellipse 20% 55% at 65% 55%, rgba(233, 165, 142, 0.22), transparent 70%),
+    radial-gradient(ellipse 30% 45% at 85% 50%, rgba(165, 155, 203, 0.3), transparent 70%);
+  filter: blur(24px);
+  opacity: 0.9;
+  animation: drift 40s ease-in-out infinite alternate;
+}
+
+/* Fine star dust packed along the band */
+.dust {
+  position: absolute;
+  left: -20%;
+  top: 30%;
+  width: 140%;
+  height: 160px;
+  transform: rotate(-10deg);
+  background-image: radial-gradient(1px 1px at 12px 18px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 47px 62px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 83px 35px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 110px 80px, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 130px 95px;
+  mask-image: radial-gradient(ellipse 50% 45% at 50% 50%, #000, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 50% 45% at 50% 50%, #000, transparent);
+  opacity: 0.6;
+}
+
+/* Twinkling stars */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle ease-in-out infinite alternate;
+}
+.bright {
+  box-shadow:
+    0 0 6px 1px rgba(255, 255, 255, 0.8),
+    0 0 12px 2px rgba(165, 155, 203, 0.5);
+}
+
+/* Shooting stars: each crosses the sky briefly, then waits before the next pass */
+.shooting {
+  position: absolute;
+  width: 140px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.95), rgba(246, 200, 142, 0.4), transparent);
+  transform-origin: left center;
+  opacity: 0;
+  animation: shoot linear infinite;
+}
+.shooting1 {
+  top: 10%;
+  left: 70%;
+  animation-duration: 9s;
+  animation-delay: 1s;
+}
+.shooting2 {
+  top: 5%;
+  left: 40%;
+  animation-duration: 13s;
+  animation-delay: 5s;
+}
+.shooting3 {
+  top: 25%;
+  left: 95%;
+  animation-duration: 17s;
+  animation-delay: 9s;
+}
+
+/* Glowing crescent moon with a pulsing halo */
+.moon {
+  position: absolute;
+  top: 26px;
+  right: max(24px, calc((100% - var(--container)) / 2));
+  width: 46px;
+  height: 46px;
+  animation: float 6s ease-in-out infinite;
+}
+.moon svg {
+  position: relative;
+  filter: drop-shadow(0 0 8px rgba(248, 227, 184, 0.8)) drop-shadow(0 0 22px rgba(246, 200, 142, 0.45));
+}
+.halo {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 227, 184, 0.28), rgba(233, 165, 142, 0.08) 45%, transparent 70%);
+  animation: pulse 5s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.15;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes shoot {
+  0% {
+    opacity: 0;
+    transform: rotate(155deg) translateX(0);
+  }
+  2% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+    transform: rotate(155deg) translateX(520px);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(155deg) translateX(520px);
+  }
+}
+@keyframes float {
+  50% {
+    transform: translateY(-8px) rotate(-6deg);
+  }
+}
+@keyframes pulse {
+  50% {
+    transform: scale(1.15);
+    opacity: 0.6;
+  }
+}
+@keyframes drift {
+  to {
+    transform: rotate(-10deg) translateX(-6%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galaxy,
+  .star,
+  .moon,
+  .halo {
+    animation: none;
+  }
+  .shooting {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .moon {
+    top: 18px;
+    transform: scale(0.8);
+  }
+  .galaxy,
+  .dust {
+    top: 20%;
+  }
+}

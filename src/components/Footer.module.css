@@ -1,9 +1,15 @@
 .footer {
+  position: relative;
+  overflow: hidden;
   background: var(--night);
   color: var(--on-dark-2);
   font-size: 15px;
-  padding-top: 64px;
+  padding-top: 20px;
   padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+}
+/* Keep the footer content above the decorative sky */
+.footer > :global(.container) {
+  position: relative;
 }
 .footer a {
   color: var(--on-dark-2);
@@ -11,77 +17,6 @@
 }
 .footer a:hover {
   color: var(--white);
-}
-.top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px 48px;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-bottom: 44px;
-  border-bottom: 1px solid #222c5a;
-}
-.signup {
-  flex: 1 1 340px;
-  min-width: 0;
-}
-.h {
-  color: var(--white);
-  font-size: 34px;
-  margin-bottom: 8px;
-}
-.p {
-  font-size: 16px;
-}
-.form {
-  flex: 1 1 420px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.formLabel {
-  font-size: 13px;
-  font-weight: 500;
-}
-.formRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.input {
-  flex: 1 1 220px;
-  min-width: 0;
-  min-height: 52px;
-  border-radius: 14px;
-  border: 1px solid #3a4577;
-  background: #141b44;
-  color: var(--white);
-  padding: 0 16px;
-  font: 400 16px var(--body);
-}
-.input::placeholder {
-  color: #7d86b3;
-}
-.input:focus {
-  outline: none;
-  border-color: var(--peach);
-  box-shadow: 0 0 0 4px rgba(246, 200, 142, 0.18);
-}
-.error {
-  color: #f2a98a;
-  font-size: 13px;
-}
-.done {
-  flex: 1 1 420px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--white);
-  font-weight: 700;
-}
-.done svg {
-  color: var(--peach);
 }
 .grid {
   display: grid;
