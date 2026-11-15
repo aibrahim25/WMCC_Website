@@ -7,10 +7,8 @@ import s from './SchoolCalendar.module.css'
 const MONTH = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
 const LONG_DATE = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })
 
-/** "2026-10-04" → Date at UTC midnight, so formatting never shifts the day. */
 const toDate = (iso) => new Date(`${iso}T00:00:00Z`)
 
-/** Groups the calendar days into [{ key: "2026-10", label: "October 2026", days: [...] }], in date order. */
 function groupByMonth(days) {
   const months = new Map()
   for (const day of [...days].sort((a, b) => a.date.localeCompare(b.date))) {
@@ -27,7 +25,6 @@ function TypeDot({ type }) {
   return <span className={`${s.dot} ${s[type]}`} aria-hidden="true" />
 }
 
-/** Sunday School yearly calendar, from src/content/schoolCalendar.json. Highlights the next school Sunday. */
 export default function SchoolCalendar() {
   const today = isoDate(partsInTz(Date.now()))
   const next = MONTHS.flatMap((m) => m.days).find((day) => day.date >= today)
