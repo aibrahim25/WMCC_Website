@@ -1,0 +1,184 @@
+.regular {
+  --tone: #3f9b6b;
+}
+.activity {
+  --tone: #4a6fd1;
+}
+.trip {
+  --tone: #8e5bd0;
+}
+.special {
+  --tone: #d99a1e;
+}
+.break {
+  --tone: #c9584a;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--tone);
+  flex-shrink: 0;
+}
+.moonIcon {
+  color: #b07a12;
+  flex-shrink: 0;
+}
+
+/* "Coming up" banner */
+.next {
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+  border-left: 6px solid var(--tone);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+}
+.nextLabel {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tone);
+}
+.nextTitle {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 24px;
+}
+.nextDate {
+  color: var(--muted);
+}
+
+/* Month cards */
+.months {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.month {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.monthTitle {
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+.days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.day {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--tone) 8%, white);
+  border-left: 4px solid var(--tone);
+}
+.dayDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 34px;
+  line-height: 1.1;
+}
+.dayDate span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--soft);
+}
+.dayDate strong {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+}
+.dayBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.dayTitle {
+  font-weight: 500;
+}
+.dayTitle .moonIcon {
+  margin-left: 6px;
+  vertical-align: -2px;
+}
+/* Emphasise anything that isn't an ordinary school day */
+.activity .dayTitle,
+.trip .dayTitle,
+.special .dayTitle,
+.break .dayTitle {
+  font-weight: 700;
+}
+.note {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.schedule {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.schedule span {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.isPast {
+  opacity: 0.45;
+}
+.isNext {
+  box-shadow: 0 0 0 2px var(--tone);
+}
+
+@media (max-width: 960px) {
+  .months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .months {
+    grid-template-columns: 1fr;
+  }
+  .next {
+    padding: 18px;
+  }
+}

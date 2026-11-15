@@ -6,6 +6,7 @@ import Reveal from '../components/Reveal'
 import Segmented from '../components/Segmented'
 import Icon from '../components/Icon'
 import FormSuccess from '../components/FormSuccess'
+import SchoolCalendar from '../components/SchoolCalendar'
 import { useForm } from '../hooks/useForm'
 import { useSubmit } from '../hooks/useSubmit'
 import { isEmail } from '../lib/format'
@@ -13,7 +14,6 @@ import { site } from '../lib/site'
 import school from '../content/school.json'
 import s from './School.module.css'
 
-/** Header gradients for the course cards, cycled in order. */
 const BANDS = [
   'linear-gradient(120deg, #18245A, #3E5A9E)',
   'linear-gradient(120deg, #2D4687, #8E83BF)',
@@ -310,6 +310,7 @@ export default function School() {
       </section>
 
       <Schedule />
+      <SchoolCalendar />
       <Registration />
     </>
   )
