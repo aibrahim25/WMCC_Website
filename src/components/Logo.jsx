@@ -4,7 +4,7 @@ export default function Logo({ size = 80 }) {
       src="/logo.png"
       alt=""
       height={size}
-      style={{ width: 'auto', height: size, marginTop: '20px' }}
+      style={{ width: 'auto', height: size}}
     />
   );
 }
