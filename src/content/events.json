@@ -1,5 +1,18 @@
 {
   "events": [
+        {
+      "id": "fundraiser-new-home-2026",
+      "title": "Fundraiser for Our New Home",
+      "category": "community",
+      "audience": "Everyone welcome · dinner will be served",
+      "schedule": "Friday, November 20",
+      "recurrence": { "type": "date", "date": "2026-11-20" },
+      "start": "18:30",
+      "location": "40 Mammoth Rd, Londonderry NH",
+      "description": "An inspiring evening of faith, unity and support as we raise funds for our new community center. Featuring motivational speaker Ameer Sattar and renowned speaker Imam Humayun Baksh, with Qur'an recitation, community updates and dinner.",
+      "tags": ["Fundraiser", "Dinner", "Talks"],
+      "link": "/donate"
+    },
     {
       "id": "youth-program",
       "title": "WMCC Youth Program",

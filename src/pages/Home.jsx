@@ -9,7 +9,11 @@ import EventCard from '../components/EventCard'
 import EventModal from '../components/EventModal'
 import MapCard from '../components/MapCard'
 import { useEvents } from '../hooks/useEvents'
-import { fullAddress, site } from '../lib/site'
+import { useNow } from '../hooks/useNow'
+import { gcalLink } from '../lib/events'
+import { pad2 } from '../lib/format'
+import { zonedTimeToMs } from '../lib/prayer'
+import { fullAddress, MAPS_URL, site } from '../lib/site'
 import school from '../content/school.json'
 import donate from '../content/donate.json'
 import s from './Home.module.css'
@@ -89,6 +93,138 @@ const PROGRAMS = [
   },
 ]
 
+// ---------------------------------------------------------------------------
+// FUNDRAISER (temporary).
+// ---------------------------------------------------------------------------
+const FUNDRAISER = {
+  title: 'Fundraiser for Our New Home',
+  tagline: 'Building today for a stronger tomorrow for our community',
+  description:
+    'Join us for an inspiring evening of faith, unity and support as we raise funds for our new community center.',
+  date: { y: 2026, m: 11, d: 20 },
+  start: '18:30',
+  dateLabel: 'Friday, November 20, 2026',
+  timeLabel: '6:30 PM',
+  speakers: [
+    { name: 'Ameer Sattar', role: 'Motivational Speaker' },
+    { name: 'Imam Humayun Baksh', role: 'Renowned Speaker' },
+  ],
+  program: ['Inspiring talks', "Qur'an recitation", 'Dinner will be served', 'Community updates'],
+}
+const FUNDRAISER_START = zonedTimeToMs(FUNDRAISER.date, FUNDRAISER.start)
+// The banner removes itself 4 hours after the start time.
+const FUNDRAISER_END = FUNDRAISER_START + 4 * 3600000
+const COUNTDOWN_UNITS = [
+  ['Days', 86400000],
+  ['Hours', 3600000],
+  ['Minutes', 60000],
+  ['Seconds', 1000],
+]
+
+function Fundraiser() {
+  const now = useNow(1000)
+  if (now > FUNDRAISER_END) return null
+
+  const remaining = Math.max(0, FUNDRAISER_START - now)
+  const calendarUrl = gcalLink({
+    title: FUNDRAISER.title,
+    description: FUNDRAISER.description,
+    start: FUNDRAISER.start,
+    next: FUNDRAISER.date,
+  })
+
+  return (
+    <section className={`container ${s.fundWrap}`} aria-labelledby="fundraiser-title">
+      <Reveal className={s.fund}>
+        <span className={s.fundEyebrow}>
+          <Icon name="sparkle" size={16} /> Special event · {FUNDRAISER.dateLabel}
+        </span>
+        <h2 id="fundraiser-title" className={s.fundTitle}>
+          Fundraiser <em>for our new home</em>
+        </h2>
+        <p className={s.fundTagline}>{FUNDRAISER.tagline}</p>
+
+        {remaining > 0 ? (
+          <div className={s.countdown} role="timer" aria-label="Time until the fundraiser starts">
+            {COUNTDOWN_UNITS.map(([label, ms], i) => {
+              const value =
+                i === 0 ? Math.floor(remaining / ms) : Math.floor((remaining % COUNTDOWN_UNITS[i - 1][1]) / ms)
+              return (
+                <div key={label} className={s.countUnit}>
+                  <strong className="tabular">{pad2(value)}</strong>
+                  <span>{label}</span>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <p className={s.fundLive}>Happening now. Join us!</p>
+        )}
+
+        <div className={s.speakers}>
+          {FUNDRAISER.speakers.map((sp) => (
+            <div key={sp.name} className={s.speaker}>
+              <span>Featuring</span>
+              <strong>{sp.name}</strong>
+              <em>{sp.role}</em>
+            </div>
+          ))}
+        </div>
+
+        <p className={s.fundLead}>{FUNDRAISER.description}</p>
+
+        <dl className={s.fundFacts}>
+          <div>
+            <dt>
+              <Icon name="calendar" size={18} /> Date
+            </dt>
+            <dd>{FUNDRAISER.dateLabel}</dd>
+          </div>
+          <div>
+            <dt>
+              <Icon name="clock" size={18} /> Starts
+            </dt>
+            <dd>{FUNDRAISER.timeLabel}</dd>
+          </div>
+          <div>
+            <dt>
+              <Icon name="pin" size={18} /> Location
+            </dt>
+            <dd>
+              <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
+                {fullAddress()}
+              </a>
+            </dd>
+          </div>
+        </dl>
+
+        <ul className={s.program} aria-label="Program">
+          {FUNDRAISER.program.map((item) => (
+            <li key={item}>
+              <Icon name="check" size={16} /> {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className={s.fundCtas}>
+          <Link to="/donate" className="btn btn-gold">
+            <Icon name="heart" size={18} /> Donate to WMCC's new masjid
+          </Link>
+          <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost-light">
+            <Icon name="calendar" size={18} /> Add to calendar
+          </a>
+        </div>
+
+        <blockquote className={s.fundQuote}>
+          “Who is it that will loan Allah a goodly loan so He may multiply it for him many times over?”
+          <cite>Qur&apos;an 2:245</cite>
+        </blockquote>
+      </Reveal>
+    </section>
+  )
+}
+// --------------------------- end FUNDRAISER ---------------------------------
+
 export default function Home() {
   const { events } = useEvents()
   const upcoming = events.filter((e) => e.next).slice(0, 3)
@@ -151,6 +287,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <Fundraiser />
 
       <section className="section container">
         <Reveal className="section-head">
