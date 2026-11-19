@@ -28,8 +28,8 @@
   },
   "integrations": {
     "prayerTimesApi": "/api/prayer-times",
-     "formspreeId": "xppdqnqq",
-    "schoolFormspreeId": "xppdqnqq",
+     "formspreeId": "mkjrbawp",
+    "schoolFormspreeId": "mkjrbawp",
     "newsletterFormspreeId": "",
     "donateUrl": "https://donation.masjidal.com/wmcc/campaign/",
     "eventsSheetCsv": ""
